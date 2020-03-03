@@ -208,9 +208,9 @@ namespace Proyecto1_201700328.Analizadores
                     //---------------------------------------------------------------------------------------------------------
                     case 5://concatena la cadena
 
-                        if (charActual == '"')
+                        if (charActual =='\n')
                         {
-                            lexema += charActual;
+                           //solamente concateno la expresion
                             aceptarToken(Token_lenguaje.TOKEN.CADENA, lexema, fila, columna);
                         }
                         else
@@ -239,7 +239,7 @@ namespace Proyecto1_201700328.Analizadores
                         if (charActual == ';' || charActual == '\n')
                         {//de encontrar el punto y coma
 
-                            if (lexema.Length == 3)
+                            if (lexema.Length == 3 || lexema.Length==5)
                             {//se trata de un rango 
 
                                 String cadena_aux = "";
@@ -295,6 +295,9 @@ namespace Proyecto1_201700328.Analizadores
                                     {
                                         aceptarToken(Token_lenguaje.TOKEN.CONJUNTOFINITIO, cadena_aux, fila, columna);
                                     }
+
+                                } else if (lexema.StartsWith("[:") && lexema.EndsWith(":]")) {
+                                    aceptarToken(Token_lenguaje.TOKEN.CARACTERTODO, lexema, fila, columna);
 
                                 }
                                 else

@@ -158,6 +158,7 @@
             this.lexemasToolStripMenuItem.Name = "lexemasToolStripMenuItem";
             this.lexemasToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.lexemasToolStripMenuItem.Text = "Lexemas";
+            this.lexemasToolStripMenuItem.Click += new System.EventHandler(this.lexemasToolStripMenuItem_Click);
             // 
             // macrosToolStripMenuItem
             // 
@@ -165,6 +166,7 @@
             this.macrosToolStripMenuItem.Name = "macrosToolStripMenuItem";
             this.macrosToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.macrosToolStripMenuItem.Text = "Macros";
+            this.macrosToolStripMenuItem.Click += new System.EventHandler(this.macrosToolStripMenuItem_Click);
             // 
             // expresionesRegularesToolStripMenuItem
             // 
@@ -172,6 +174,7 @@
             this.expresionesRegularesToolStripMenuItem.Name = "expresionesRegularesToolStripMenuItem";
             this.expresionesRegularesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.expresionesRegularesToolStripMenuItem.Text = "Expresiones Regulares";
+            this.expresionesRegularesToolStripMenuItem.Click += new System.EventHandler(this.expresionesRegularesToolStripMenuItem_Click);
             // 
             // analizarArchivoToolStripMenuItem
             // 

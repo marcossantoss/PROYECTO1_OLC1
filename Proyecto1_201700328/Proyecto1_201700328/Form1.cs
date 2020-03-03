@@ -164,6 +164,19 @@ namespace Proyecto1_201700328
                 generar_reportes.escribir_fichero_tokens(analizar_lexicamente.returnListaTokens());
                 generar_reportes.probrando(analizar_lexicamente.returnListaErroresLexicos());
 
+                Analizadores.Analisis_Sintactico analizar_sintacticamente = new Analizadores.Analisis_Sintactico(analizar_lexicamente.returnListaTokens());
+
+                if (analizar_sintacticamente.parser()) {
+
+
+                    MessageBox.Show("Analisis Sintactico correcto");
+
+                    generar_reportes.escribir_macros(analizar_sintacticamente.Macros);
+                    generar_reportes.escribir_lexemas(analizar_sintacticamente.Lexemas);
+                    generar_reportes.escribir_expresionesregulares(analizar_sintacticamente.ExpresionesRegulares);
+
+                }
+
 
                 Console.WriteLine("Analisis concluido");
             }
@@ -200,6 +213,21 @@ namespace Proyecto1_201700328
         private void erroresLexicosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             generar_reportes.mostrar_reporte_ErroresLexicos();
+        }
+
+        private void lexemasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            generar_reportes.mostrar_lexemas();
+        }
+
+        private void macrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            generar_reportes.mostrar_macros();
+        }
+
+        private void expresionesRegularesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            generar_reportes.mostrar_expresionesregulares();
         }
     }
 }
