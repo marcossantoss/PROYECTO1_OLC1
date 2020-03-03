@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1_201700328.Analizadores
 {
-    class Token_lenguaje
+   public class Token_lenguaje
     {
 
         private TOKEN tipo;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto1_201700328.Analizadores
 {
-    class Analisis_Sintactico
+    public class Analisis_Sintactico
     {
     }
 }

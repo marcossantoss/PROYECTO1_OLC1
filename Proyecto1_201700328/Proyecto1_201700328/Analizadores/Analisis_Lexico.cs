@@ -111,9 +111,15 @@ namespace Proyecto1_201700328.Analizadores
                             aceptarToken(Token_lenguaje.TOKEN.DOSPUNTOS, lexema, fila, columna);
 
                         }
+                        else if (charActual == ';')
+                        {
+                            lexema += charActual;
+                            aceptarToken(Token_lenguaje.TOKEN.PTOCOMA, lexema, fila, columna);
+
+                        }
                         else if (charActual >= 65 && charActual <= 90 || charActual >= 97 && charActual <= 122)
                         {//una letra
-
+                         //   MessageBox.Show("tengo una letra");
 
                             lexema += charActual;
                             estado = 8;
@@ -121,7 +127,7 @@ namespace Proyecto1_201700328.Analizadores
                         else if (charActual == '\n' || charActual == '\t' || charActual == ' ')
                         {//soporte de espacio , tabulaciones , salto de linea
 
-                            //no se hace nada se ignoran
+                            estado = 0;
                         }
                         else
                         {
@@ -265,12 +271,12 @@ namespace Proyecto1_201700328.Analizadores
                             else
                             {// se trata de un conjunto especifico
 
-                                if (lexema.ElementAt(1).Equals(","))
+                                if (lexema.ElementAt(1) == ',')
                                 {//es un conjunto
                                     String cadena_aux = "";
                                     for (int i = 0; i < lexema.Length; i++)
                                     {
-                                        if (lexema[i] >= 32 && lexema[i] >= 43 && lexema[i] >= 45 && lexema[i] <= 125)
+                                        if (lexema[i] >= 32 && lexema[i] <= 125)
                                         {
                                             cadena_aux += lexema[i];
                                         }
@@ -338,13 +344,15 @@ namespace Proyecto1_201700328.Analizadores
 
                         break;
                     case 8:
-                        if (contenido_areaTexto[auxcaracter + 1].Equals("-") || contenido_areaTexto[auxcaracter + 1].Equals(" ") || contenido_areaTexto[auxcaracter + 1].Equals(":"))
+                      //  MessageBox.Show("Estado 8: "+ contenido_areaTexto[auxcaracter] +" - "+contenido_areaTexto[auxcaracter + 1].ToString());
+                        if (contenido_areaTexto[auxcaracter + 1]== '-' || contenido_areaTexto[auxcaracter + 1]== ' ' || contenido_areaTexto[auxcaracter + 1]== ':' || contenido_areaTexto[auxcaracter + 1] == '\t')
                         {
                             lexema += charActual;
                             aceptarToken(Token_lenguaje.TOKEN.ID, lexema, fila, columna);
                         }
                         else if (charActual >= 65 && charActual <= 90 || charActual >= 97 && charActual <= 122)
                         {//una letra
+                       //     MessageBox.Show("tengo otra letra");
                             lexema += charActual;
                             estado = 8;
                         }
@@ -437,7 +445,7 @@ namespace Proyecto1_201700328.Analizadores
                 columna++;//aumenta la columna cada vez que lee el siguiente caracter
                 auxcaracter++;
             } 
-            Console.Write("Analisis concluido");
+    
         
         }
 

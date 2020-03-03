@@ -22,6 +22,8 @@ namespace Proyecto1_201700328
 
         Hashtable pestanas = new Hashtable();
 
+        Reportes_HTML.Reporte_html generar_reportes = new Reportes_HTML.Reporte_html();
+
 
         private void erroresLeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -157,6 +159,12 @@ namespace Proyecto1_201700328
            //     MessageBox.Show(texto_analizar.Text);
            Analizadores.Analisis_Lexico analizar_lexicamente = new Analizadores.Analisis_Lexico(texto_analizar.Text);
            analizar_lexicamente.scanner();
+
+                
+                generar_reportes.escribir_fichero_tokens(analizar_lexicamente.returnListaTokens());
+                generar_reportes.probrando(analizar_lexicamente.returnListaErroresLexicos());
+
+
                 Console.WriteLine("Analisis concluido");
             }
 
@@ -182,6 +190,16 @@ namespace Proyecto1_201700328
             pestanas.Add(paginaNueva, lienzo);
 
             contador_tabs++;
+        }
+
+        private void tokensHTMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            generar_reportes.mostrar_reporte_tokens();
+        }
+
+        private void erroresLexicosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            generar_reportes.mostrar_reporte_ErroresLexicos();
         }
     }
 }

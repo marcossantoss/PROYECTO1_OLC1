@@ -89,7 +89,7 @@
             // 
             this.abrirToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("abrirToolStripMenuItem.Image")));
             this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.abrirToolStripMenuItem.Text = "Abrir";
             this.abrirToolStripMenuItem.Click += new System.EventHandler(this.abrirToolStripMenuItem_Click);
             // 
@@ -97,14 +97,14 @@
             // 
             this.guardarToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guardarToolStripMenuItem.Image")));
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.guardarToolStripMenuItem.Text = "Guardar";
             // 
             // guardarComoToolStripMenuItem
             // 
             this.guardarComoToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guardarComoToolStripMenuItem.Image")));
             this.guardarComoToolStripMenuItem.Name = "guardarComoToolStripMenuItem";
-            this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.guardarComoToolStripMenuItem.Text = "Guardar Como";
             // 
             // reportesToolStripMenuItem
@@ -127,6 +127,7 @@
             this.tokensHTMLToolStripMenuItem.Name = "tokensHTMLToolStripMenuItem";
             this.tokensHTMLToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.tokensHTMLToolStripMenuItem.Text = "Tokens HTML";
+            this.tokensHTMLToolStripMenuItem.Click += new System.EventHandler(this.tokensHTMLToolStripMenuItem_Click);
             // 
             // tokensXMLToolStripMenuItem
             // 
@@ -141,6 +142,7 @@
             this.erroresLexicosToolStripMenuItem.Name = "erroresLexicosToolStripMenuItem";
             this.erroresLexicosToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.erroresLexicosToolStripMenuItem.Text = "Errores Lexicos HTML";
+            this.erroresLexicosToolStripMenuItem.Click += new System.EventHandler(this.erroresLexicosToolStripMenuItem_Click);
             // 
             // erroresLeToolStripMenuItem
             // 
