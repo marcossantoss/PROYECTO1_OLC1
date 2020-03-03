@@ -39,6 +39,8 @@ namespace Proyecto1_201700328.Analizadores
             DOSPUNTOS,//:
             ASCIII,//CUALQUIER SIMBOLO ASCII COMPRENDIDO DEL 32-47 , 58-64 , 91-96 , 123-125
             COMA,// ,
+            CARACTERESPECIAL,// \n \'  \"  \t  
+            CARACTERTODO,// [:todo:]
 
 
             /*SIMBOLOS COMPUESTOS*/
@@ -162,6 +164,10 @@ namespace Proyecto1_201700328.Analizadores
                     return "Conjunto finito de caracteres ASCCI 32 al 125";
                 case TOKEN.ACEPTACION:
                     return "Simbolo de fin del archivo";
+                case TOKEN.CARACTERESPECIAL:
+                    return "Caracter Especial";
+                case TOKEN.CARACTERTODO:
+                    return "Todos los caracteres especiales menor el salto de linea";
                 default:
                     return "error!";
             }

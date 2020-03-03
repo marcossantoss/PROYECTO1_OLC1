@@ -31,11 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reportesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.analizarArchivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guardarComoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensHTMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tokensXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.erroresLexicosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +42,9 @@
             this.lexemasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.macrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expresionesRegularesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.analizarArchivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -53,9 +54,8 @@
             this.button5 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.nuevaPestañaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -80,32 +80,10 @@
             this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.abrirToolStripMenuItem,
             this.guardarToolStripMenuItem,
-            this.guardarComoToolStripMenuItem,
-            this.nuevaPestañaToolStripMenuItem});
+            this.guardarComoToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
             this.archivoToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
             this.archivoToolStripMenuItem.Text = "Archivo";
-            // 
-            // reportesToolStripMenuItem
-            // 
-            this.reportesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tokensHTMLToolStripMenuItem,
-            this.tokensXMLToolStripMenuItem,
-            this.erroresLexicosToolStripMenuItem,
-            this.erroresLeToolStripMenuItem,
-            this.lexemasToolStripMenuItem,
-            this.macrosToolStripMenuItem,
-            this.expresionesRegularesToolStripMenuItem});
-            this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
-            this.reportesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
-            this.reportesToolStripMenuItem.Text = "Reportes";
-            // 
-            // analizarArchivoToolStripMenuItem
-            // 
-            this.analizarArchivoToolStripMenuItem.Name = "analizarArchivoToolStripMenuItem";
-            this.analizarArchivoToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
-            this.analizarArchivoToolStripMenuItem.Text = "Analizar Archivo";
-            this.analizarArchivoToolStripMenuItem.Click += new System.EventHandler(this.analizarArchivoToolStripMenuItem_Click);
             // 
             // abrirToolStripMenuItem
             // 
@@ -128,6 +106,20 @@
             this.guardarComoToolStripMenuItem.Name = "guardarComoToolStripMenuItem";
             this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.guardarComoToolStripMenuItem.Text = "Guardar Como";
+            // 
+            // reportesToolStripMenuItem
+            // 
+            this.reportesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tokensHTMLToolStripMenuItem,
+            this.tokensXMLToolStripMenuItem,
+            this.erroresLexicosToolStripMenuItem,
+            this.erroresLeToolStripMenuItem,
+            this.lexemasToolStripMenuItem,
+            this.macrosToolStripMenuItem,
+            this.expresionesRegularesToolStripMenuItem});
+            this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
+            this.reportesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.reportesToolStripMenuItem.Text = "Reportes";
             // 
             // tokensHTMLToolStripMenuItem
             // 
@@ -179,6 +171,13 @@
             this.expresionesRegularesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.expresionesRegularesToolStripMenuItem.Text = "Expresiones Regulares";
             // 
+            // analizarArchivoToolStripMenuItem
+            // 
+            this.analizarArchivoToolStripMenuItem.Name = "analizarArchivoToolStripMenuItem";
+            this.analizarArchivoToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
+            this.analizarArchivoToolStripMenuItem.Text = "Analizar Archivo";
+            this.analizarArchivoToolStripMenuItem.Click += new System.EventHandler(this.analizarArchivoToolStripMenuItem_Click);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.tabControl1);
@@ -189,6 +188,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Archivo de Analisis";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Location = new System.Drawing.Point(7, 20);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(563, 337);
+            this.tabControl1.TabIndex = 1;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // button1
             // 
@@ -276,22 +284,6 @@
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
             // 
-            // nuevaPestañaToolStripMenuItem
-            // 
-            this.nuevaPestañaToolStripMenuItem.Name = "nuevaPestañaToolStripMenuItem";
-            this.nuevaPestañaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.nuevaPestañaToolStripMenuItem.Text = "Nueva Pestaña";
-            this.nuevaPestañaToolStripMenuItem.Click += new System.EventHandler(this.nuevaPestañaToolStripMenuItem_Click);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Location = new System.Drawing.Point(7, 20);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(563, 337);
-            this.tabControl1.TabIndex = 1;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.Red;
@@ -303,11 +295,22 @@
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // button7
+            // 
+            this.button7.Image = ((System.Drawing.Image)(resources.GetObject("button7.Image")));
+            this.button7.Location = new System.Drawing.Point(29, 19);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(31, 32);
+            this.button7.TabIndex = 11;
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1231, 670);
+            this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button5);
@@ -358,9 +361,9 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.ToolStripMenuItem nuevaPestañaToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }
 

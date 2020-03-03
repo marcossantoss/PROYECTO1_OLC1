@@ -48,10 +48,11 @@ namespace Proyecto1_201700328
             archivo.CheckFileExists = true;
             archivo.Title = "Abrir archivo";
             archivo.ShowDialog(this);
-            try {
+            try
+            {
                 archivo.OpenFile();
                 lectura = System.IO.File.OpenText(archivo.FileName);
-                
+
 
                 String nombre_pagina = "pestaña" + contador_tabs;
 
@@ -71,17 +72,20 @@ namespace Proyecto1_201700328
 
 
 
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 MessageBox.Show("Error, no se puedo abrir el archivo");
             }
 
-               
+
+
         }
 
         private void nuevaPestañaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //generamos nueva pestaña , un nuevo tabpage
-            String nombre_pagina = "pestaña"+ contador_tabs;
+            String nombre_pagina = "pestaña" + contador_tabs;
 
             TabPage paginaNueva = new TabPage(nombre_pagina);
 
@@ -92,13 +96,16 @@ namespace Proyecto1_201700328
             lienzo.Width = 555;
 
             paginaNueva.Controls.Add(lienzo);
-            
+
             tabControl1.TabPages.Add(paginaNueva);
 
-            pestanas.Add(paginaNueva,lienzo);
-          
+            pestanas.Add(paginaNueva, lienzo);
+
             contador_tabs++;
-           
+
+
+
+
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -113,6 +120,7 @@ namespace Proyecto1_201700328
             catch (Exception) {
 
                 MessageBox.Show("No hay pestañas en el cuadro de edición,\nIntenta abrir un nuevo archivo o genera una nueva pestaña");
+
             }
            
             
@@ -146,9 +154,34 @@ namespace Proyecto1_201700328
 
             } else {
 
-                MessageBox.Show(texto_analizar.Text);
+           //     MessageBox.Show(texto_analizar.Text);
+           Analizadores.Analisis_Lexico analizar_lexicamente = new Analizadores.Analisis_Lexico(texto_analizar.Text);
+           analizar_lexicamente.scanner();
+                Console.WriteLine("Analisis concluido");
             }
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //generamos nueva pestaña , un nuevo tabpage
+            String nombre_pagina = "pestaña" + contador_tabs;
+
+            TabPage paginaNueva = new TabPage(nombre_pagina);
+
+            RichTextBox lienzo = new RichTextBox();
+
+            lienzo.Text = "//archivo nuevo";
+            lienzo.Height = 330;
+            lienzo.Width = 555;
+
+            paginaNueva.Controls.Add(lienzo);
+
+            tabControl1.TabPages.Add(paginaNueva);
+
+            pestanas.Add(paginaNueva, lienzo);
+
+            contador_tabs++;
         }
     }
 }
