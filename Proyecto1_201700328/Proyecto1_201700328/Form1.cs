@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proyecto1_201700328.Analsis_thompson;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -138,9 +139,21 @@ namespace Proyecto1_201700328
 
         private RichTextBox buscar_pestana(TabPage pestana)
         {
-            if (pestanas.ContainsKey(pestana)) {
-                //CASTEAMOS LOS DATOS
-                return (RichTextBox) pestanas[pestana];
+            try
+            {
+                if (pestanas.ContainsKey(pestana))
+                {
+                    //CASTEAMOS LOS DATOS
+                    return (RichTextBox)pestanas[pestana];
+                }
+
+
+
+            }
+            catch (Exception) {
+
+                MessageBox.Show("No se ha seleccionado una pestaña");
+
             }
             return null;
         }
@@ -175,6 +188,10 @@ namespace Proyecto1_201700328
                     generar_reportes.escribir_lexemas(analizar_sintacticamente.Lexemas);
                     generar_reportes.escribir_expresionesregulares(analizar_sintacticamente.ExpresionesRegulares);
 
+                    metodo_de_thompson hacer_analisis = new metodo_de_thompson(analizar_sintacticamente.Macros, analizar_sintacticamente.Lexemas, analizar_sintacticamente.ExpresionesRegulares);
+                    hacer_analisis.procesar_expresiones();
+                    hacer_analisis.thompson();
+                   
                 }
 
 

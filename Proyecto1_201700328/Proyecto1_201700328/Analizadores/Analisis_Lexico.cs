@@ -308,7 +308,7 @@ namespace Proyecto1_201700328.Analizadores
                                     for (int i = 0; i < lexema.Length; i++)
                                     {
 
-                                        if (lexema[i] >= 32 && lexema[i] <= 125 || lexema[i] == '|')
+                                        if (lexema[i] >= 32 && lexema[i] <= 125 || lexema[i] == '|' || lexema[i] == 'ε')
                                         {
                                             cadena_aux += lexema[i];
                                         }
