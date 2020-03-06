@@ -18,9 +18,11 @@ namespace Proyecto1_201700328.Analsis_thompson
         LinkedList<Expresion_Lexema> lista_lexemas;
         LinkedList<Expresion_Lexema> lista_expresiones;
 
+        LinkedList<String> pila = new LinkedList<String>();
+
         LinkedList<Tablas_de_informacion> Informacion_de_cadaID = new LinkedList<Tablas_de_informacion>();
 
-        Nodo Raiz_temporal_final = null;
+    
 
         public metodo_de_thompson(LinkedList<Expresion_Lexema> lista_macros, LinkedList<Expresion_Lexema> lista_lexemas, LinkedList<Expresion_Lexema> lista_expresiones)
         {
@@ -117,7 +119,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                         else if (caracter == '"' && cont_verificador == 1)
                         {
                             cadena_nueva += caracter;
-                            expresion_estructurada.AddLast(cadena_nueva.Replace("\"","´"));
+                            expresion_estructurada.AddLast(cadena_nueva.Replace("\"", "´"));
                             cadena_nueva = "";
                             cont_verificador = 0;
 
@@ -183,21 +185,21 @@ namespace Proyecto1_201700328.Analsis_thompson
                         contAux++;//auxiliar de preanalisis de caracter 
                     }
                 }
-                    Console.WriteLine("\n\nantes_ " + expresion.getIdentiicador());
-                    foreach (String f in expresion_estructurada)
-                    {
+                Console.WriteLine("\n\nantes_ " + expresion.getIdentiicador());
+                foreach (String f in expresion_estructurada)
+                {
 
-                        Console.WriteLine(f + " ");
-                    }
+                    Console.WriteLine(f + " ");
+                }
 
 
-                    Informacion_de_cadaID.AddLast(new Tablas_de_informacion(expresion.getIdentiicador(), null, null, expresion_estructurada, null));
+                Informacion_de_cadaID.AddLast(new Tablas_de_informacion(expresion.getIdentiicador(), null, null, expresion_estructurada, null));
 
-               }
-            
+            }
+
         }
 
-        Graficadora.Graficadora grafica =new Graficadora.Graficadora();
+        Graficadora.Graficadora grafica = new Graficadora.Graficadora();
 
         int i = 0;
         String arbol_dot = "";
@@ -219,10 +221,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                     padre.agregarHijo(hijo2);
                     formarArbol(padre, expression.expresionEstructurdaenLista);
 
-
-                    Nodo NodoInicio = new Nodo(estado.ToString());
-
-                    Raiz_temporal_final = NodoInicio;
+               
                     generarAFND(hijo1);
                     //analisis de transiciones
                     /*    LinkedList<Transicion> nueva_t_transiciones = new LinkedList<>();
@@ -232,18 +231,18 @@ namespace Proyecto1_201700328.Analsis_thompson
                         */
 
 
-                    grafica.escribir_fichero_grafo(arbol_dot,expression.id);
+                    grafica.escribir_fichero_grafo(arbol_dot, expression.id);
 
 
                     //se procede a graficar
                     grafica.escribir_fichero_grafo(grafica.recorrer_arbolito(padre) + "\n label=\"" + expression.id + "\";\n", expression.id);
                     grafica.generar_Dot_grafo(expression.id);
-                    
+
 
                 }
                 else
                 {// si vienen mas 
-                  //  MessageBox.Show("estoy aqui");
+                 //  MessageBox.Show("estoy aqui");
                     Nodo padre = new Nodo(".");
                     Nodo hijo1 = new Nodo(expression.expresionEstructurdaenLista.ElementAt(i));
                     Nodo hijo2 = new Nodo("#");
@@ -269,16 +268,27 @@ namespace Proyecto1_201700328.Analsis_thompson
 
 
                     //se procede a graficar
-                    Nodo NodoInicio = new Nodo(estado.ToString());
+                   
                     arbol_dot += "rankdir=LR; size = \"8,5\"\n";
                     arbol_dot += "node [shape = circle];\n";
-                   
-                    Raiz_temporal_final = NodoInicio;
-                    generarAFND(hijo1);
-                   // arbol_dot += " node[shape = doublecircle];" +estado.ToString();
 
-                    grafica.escribir_fichero_grafo(arbol_dot, expression.id+"_AFND");
+                    generarAFND(hijo1);
+              
+                    // arbol_dot += " node[shape = doublecircle];" +estado.ToString();
+
+                    grafica.escribir_fichero_grafo(arbol_dot, expression.id + "_AFND");
                     grafica.generar_Dot_grafo(expression.id + "_AFND");
+
+                    /*para ver el recorrido del arbol*/
+                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n"+ "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta), expression.id + "_AFNDrecorrido");
+                    grafica.generar_Dot_grafo(expression.id + "_AFNDrecorrido");
+
+                    
+                  
+
+                    /*reccorido pulido*/
+                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = circle];\n" +recorrer_AFND(inicio_devuelta), expression.id + "_AFNDpulido");
+                    grafica.generar_Dot_grafo(expression.id + "_AFNDpulido");
 
                     grafica.escribir_fichero_grafo(grafica.recorrer_arbolito(padre) + "\n label=\"" + expression.id + "\";\n", expression.id);
                     grafica.generar_Dot_grafo(expression.id);
@@ -288,8 +298,9 @@ namespace Proyecto1_201700328.Analsis_thompson
                 //limpiamos nuestros operadores
                 i = 0;
                 arbol_dot = "";
-                Raiz_temporal_final = null;
+                
                 estado = 0;
+                pila.Clear();
             }
 
         }
@@ -358,298 +369,365 @@ namespace Proyecto1_201700328.Analsis_thompson
         }
         int hijoizquierdo = 0;
         int hijoderecho = 1;
-        String datoIzquierdo = "";
-        String datoDerecho = "";
 
-        public String generarAFND(Nodo raiz) {
 
-          
-                if (raiz.valor.Equals("."))
-                {
+        Nodo izquierda_inicio_and = null;
+        Nodo izquierda_fin_and = null;
 
-                Raiz_temporal_final = concatenacion(Raiz_temporal_final, datoIzquierdo, datoDerecho);
+        Nodo derecha_inicio_and = null;
+        Nodo derecha_fin_and = null;
 
-                datoIzquierdo = generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
-                datoDerecho = generarAFND(raiz.hijos.ElementAt(hijoderecho));
-          
-                  
-                
-                }
-                else if (raiz.valor.Equals("(or)"))
-                {
-                Raiz_temporal_final = union(Raiz_temporal_final, datoIzquierdo, datoDerecho);//hereda dos hijos
+        Nodo izquierda_inicio = null;
+        Nodo izquierda_fin = null;
 
-                datoIzquierdo = generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
-                datoDerecho = generarAFND(raiz.hijos.ElementAt(hijoderecho));
+        Nodo derecha_inicio = null;
+        Nodo derecha_fin = null;
 
-                
+        Nodo inicio_devuelta = null;
+        Nodo fin_devuelta = null;
+
+
+       // Nodo[] datoIzquierdo = null;
+       // Nodo[] datoDerecho = null;
+
+        public void generarAFND(Nodo raiz) {
+
+
+            if (raiz.valor.Equals("."))
+            {
+
+
+                generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
+                izquierda_inicio_and = inicio_devuelta;
+                izquierda_fin_and = fin_devuelta;
+        
+                generarAFND(raiz.hijos.ElementAt(hijoderecho));
+                derecha_inicio_and = inicio_devuelta;
+                derecha_fin_and = fin_devuelta;
+                concatenacion(izquierda_inicio_and,izquierda_fin_and,derecha_inicio_and,derecha_fin_and);
+
 
             }
-                else if (raiz.valor.Equals("*"))
-                {
+            else if (raiz.valor.Equals("(or)"))
+            {
+                //hereda dos hijos
+
+                generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
+                izquierda_inicio = inicio_devuelta;
+                izquierda_fin = fin_devuelta;
+                generarAFND(raiz.hijos.ElementAt(hijoderecho));
+                derecha_inicio = inicio_devuelta;
+                derecha_fin = fin_devuelta;
+
+                union(izquierda_inicio, izquierda_fin, derecha_inicio, derecha_fin);
+
+
+
+            }
+            else if (raiz.valor.Equals("*"))
+            {
                 //hereda un hijo
-                datoIzquierdo = generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
-            
+                generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
 
-                Raiz_temporal_final = cerraduraasterisco(Raiz_temporal_final, datoIzquierdo);
+                cerraduraasterisco(inicio_devuelta,fin_devuelta);
 
 
             }
-                else if (raiz.valor.Equals("+"))
-                {
+            else if (raiz.valor.Equals("+"))
+            {
                 //hereda un hijo
-                datoIzquierdo = generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
+                generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
 
 
-                Raiz_temporal_final = cerradurapositiva(Raiz_temporal_final, datoIzquierdo);
+                cerradurapositiva(inicio_devuelta,fin_devuelta);
 
-            }
-                else if (raiz.valor.Equals("?"))
-                {
+            } else if (raiz.valor.Equals("?")) {
                 //herada un hijo
-                datoIzquierdo = generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
+                 generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
 
 
-                Raiz_temporal_final = cerradurapregunta(Raiz_temporal_final, datoIzquierdo);
+                 cerradurapregunta(inicio_devuelta,fin_devuelta);
 
-            }
-                else
-                {
+            } else {
 
                 //de una hoja
-                return raiz.valor;
+                //retornar un simbolo o epsilon
+                simbolo(raiz.valor);
+                return;
 
-                }
-            return "";
             }
+            
+        }
 
-                     
 
-        
+
+
 
 
         /*VAMOS A INCLUIR METODOS PARA AGREGAR SOLAMENTE LOS BLOQUES SEGUN LA CERRADURA*/
 
-        public Nodo epsilon(Nodo padre_anterior,String simbolo) {
 
-            padre_anterior.transicion = "ε";
+        public void simbolo(String simbolo) {
 
-            Nodo nuevo_nodo = new Nodo(estado.ToString());     estado++;
+         
+            
 
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo_nodo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(nuevo_nodo);
-
-            return nuevo_nodo;
-
-        }
-
-
-        public Nodo simbolo(Nodo padre_anterior, String simbolo) {
-
-            padre_anterior.transicion = simbolo;
-
-            Nodo nuevo_nodo = new Nodo(estado.ToString());    estado++;
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo_nodo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(nuevo_nodo);
-
-            return nuevo_nodo;
-
-
-        }
-
-        public Nodo concatenacion(Nodo padre_anterior, String simbolo1,String simbolo2)
-        {
-            //LR_0 -> LR_2 [ label = "SS(B)" ];
-            padre_anterior.transicion = simbolo1;
-
-          
-            Nodo nuevo_nodo = new Nodo(estado.ToString());   estado++;
-            nuevo_nodo.transicion = "ε";
-
-
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo_nodo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(nuevo_nodo);
-
-            Nodo nuevo_nodo1 = new Nodo(estado.ToString());   estado++;
-            nuevo_nodo1.transicion = simbolo2;
-
-            arbol_dot += nuevo_nodo.GetHashCode().ToString() + "->" + nuevo_nodo1.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo_nodo.transicion + "\"]\n";
-            nuevo_nodo.agregarHijo(nuevo_nodo1);
-
-            Nodo nuevo_nodo2 = new Nodo(estado.ToString()); estado++;
-           
-
-            arbol_dot += nuevo_nodo1.GetHashCode().ToString() + "->" + nuevo_nodo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + "ε" + "\"]\n";
-            nuevo_nodo1.agregarHijo(nuevo_nodo2);
-
-            return nuevo_nodo2;
-
-        }
-
-
-        public Nodo union(Nodo padre_anterior, String simbolo1, String simbolo2)
-        {
-
-            padre_anterior.transicion = "ε";
-
-            Nodo arriba1= new Nodo(estado.ToString()); estado++;
-            arriba1.transicion = simbolo1;
-
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + arriba1.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(arriba1);
-
-
-            Nodo arriba2 = new Nodo(estado.ToString()); estado++;
-            arriba2.transicion = "ε";
-
-            arbol_dot += arriba1.GetHashCode().ToString() + "->" + arriba2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + arriba1.transicion + "\"]\n";
-            arriba1.agregarHijo(arriba2);
-
-           Nodo abajo1 = new Nodo(estado.ToString()); estado++;
-            abajo1.transicion = simbolo2;
-
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + abajo1.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(abajo1);
-
-            Nodo abajo2 = new Nodo(estado.ToString()); estado++;
-            abajo2.transicion = "ε";
-
-            arbol_dot += abajo1.GetHashCode().ToString() + "->" + abajo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + abajo1.transicion + "\"]\n";
-            abajo1.agregarHijo(abajo2);
-
+           Nodo inicio = new Nodo(estado.ToString()); estado++;
+            inicio.transicion = simbolo;
+            inicio_devuelta = inicio;
 
             Nodo fin = new Nodo(estado.ToString()); estado++;
-
-            arbol_dot += arriba2.GetHashCode().ToString() + "->" + fin.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + arriba2.transicion + "\"]\n";
-            arriba2.agregarHijo(fin);
-
-            arbol_dot += abajo2.GetHashCode().ToString() + "->" + fin.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + abajo2.transicion + "\"]\n";
-            abajo2.agregarHijo(fin);
-
-
-            return fin;
-
-        }
-
-        public Nodo cerraduraasterisco(Nodo padre_anterior, String simbolo1)
-        {
-            padre_anterior.transicion = "ε";
-
-            Nodo nuevo = new Nodo(estado.ToString()); estado++;
-            nuevo.transicion = simbolo1;
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(nuevo);
-
-            Nodo nuevo1 = new Nodo(estado.ToString()); estado++;
-            nuevo1.transicion = "ε";
-
-
-            arbol_dot += nuevo.GetHashCode().ToString() + "->" + nuevo1.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo.transicion + "\"]\n";
-            nuevo.agregarHijo(nuevo1);
-
-            arbol_dot += nuevo1.GetHashCode().ToString() + "->" + nuevo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo1.transicion + "\"]\n";
-            nuevo1.agregarHijo(nuevo);
-
-            Nodo nuevo2 = new Nodo(estado.ToString()); estado++;
-
-            arbol_dot += nuevo1.GetHashCode().ToString() + "->" + nuevo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo1.transicion + "\"]\n";
-            nuevo1.agregarHijo(nuevo2);
-
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + "ε" + "\"]\n";
-            padre_anterior.agregarHijo(nuevo2);
+            fin_devuelta = fin;
+            arbol_dot += inicio.valor + "->" + fin.valor;
+            arbol_dot += "[label= \"" + inicio.transicion + "\"]\n";
+            //inicio-> fin
+            inicio.agregarHijo(fin);
 
 
 
-            return nuevo2;
-
-        }
-
-
-        public Nodo cerradurapregunta(Nodo padre_anterior,String simbolo) {
-
-            padre_anterior.transicion = "ε";
-
-            Nodo nuevo = new Nodo(estado.ToString()); estado++;
-            nuevo.transicion = simbolo;
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(nuevo);
-
-            Nodo nuevo1 = new Nodo(estado.ToString()); estado++;
-            nuevo1.transicion = "ε";
-
-            arbol_dot += nuevo.GetHashCode().ToString() + "->" + nuevo1.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo.transicion + "\"]\n";
-            nuevo.agregarHijo(nuevo1);
-
-            Nodo nuevo2 = new Nodo(estado.ToString()); estado++;
-            arbol_dot += nuevo1.GetHashCode().ToString() + "->" + nuevo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo1.transicion + "\"]\n";
-            nuevo1.agregarHijo(nuevo2);
-
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + "ε" + "\"]\n";
-            padre_anterior.agregarHijo(nuevo2);
-
-
-
-            return nuevo2;
-
-
-
-        }
-
-
-        public Nodo cerradurapositiva(Nodo padre_anterior, String simbolo)
-        {
-
-            padre_anterior.transicion = "ε";
-
-            Nodo nuevo = new Nodo(estado.ToString()); estado++;
-            nuevo.transicion = simbolo;
-            arbol_dot += padre_anterior.GetHashCode().ToString() + "->" + nuevo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + padre_anterior.transicion + "\"]\n";
-            padre_anterior.agregarHijo(nuevo);
-
-            Nodo nuevo1 = new Nodo(estado.ToString()); estado++;
-            nuevo1.transicion = "ε";
-            arbol_dot += nuevo.GetHashCode().ToString() + "->" + nuevo1.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo.transicion + "\"]\n";
-            nuevo.agregarHijo(nuevo1);
-
-            arbol_dot += nuevo1.GetHashCode().ToString() + "->" + nuevo.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo1.transicion + "\"]\n";
-            nuevo1.agregarHijo(nuevo);
-
-            Nodo nuevo2 = new Nodo(estado.ToString()); estado++;
-
-            arbol_dot += nuevo1.GetHashCode().ToString() + "->" + nuevo2.GetHashCode().ToString();
-            arbol_dot += "[label= \"" + nuevo1.transicion + "\"]\n";
-            nuevo1.agregarHijo(nuevo2);
            
 
 
+        }
 
-            return nuevo2;
+        public void concatenacion(Nodo inicio1aux, Nodo fin1aux,Nodo inicio2aux, Nodo fin2aux)
+        {
+
+            Nodo inicio1 = inicio1aux;
+            Nodo fin1 = fin1aux;
+            Nodo inicio2 = inicio2aux;
+            Nodo fin2 = fin2aux;
+
+            fin1.transicion = "ε";
+            fin1.agregarHijo(inicio2);
+
+          
+            arbol_dot += fin1.valor+ "->" + inicio2.valor;
+           // fin1.agregarHijo(inicio2);
+            arbol_dot += "[label= \"" + "ε" + "\"]\n";
+
+
+            //nuevos
+            inicio_devuelta = inicio1;
+            fin_devuelta = fin2;
+
+        }
+
+
+        public void union(Nodo inicio1aux, Nodo fin1aux, Nodo inicio2aux, Nodo fin2aux)
+        {
+
+
+            Nodo inicio1 = inicio1aux;
+            Nodo fin1 = fin1aux;
+
+            Nodo inicio2 = inicio2aux;
+            Nodo fin2 = fin2aux;
+
+
+            Nodo inicio_or = new Nodo(estado.ToString()); estado++;
+            inicio_or.transicion = "ε";
+
+            inicio_or.agregarHijo(inicio1);
+            inicio_or.agregarHijo(inicio2);
+
+            arbol_dot += inicio_or.valor + "->" + inicio1.valor;
+            arbol_dot += "[label= \"" + inicio_or.transicion + "\"]\n";
+
+            arbol_dot += inicio_or.valor + "->" + inicio2.valor;
+            arbol_dot += "[label= \"" + inicio_or.transicion + "\"]\n";
+
+            Nodo fin_or = new Nodo(estado.ToString()); estado++;
+
+            fin1.agregarHijo(fin_or);
+            fin1.transicion= "ε";
+            fin2.agregarHijo(fin_or);
+            fin2.transicion = "ε";
+
+            arbol_dot += fin1.valor + "->" +fin_or.valor;
+            arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
+
+            arbol_dot += fin2.valor + "->" + fin_or.valor;
+            arbol_dot += "[label= \"" + fin2.transicion + "\"]\n";
 
 
 
+            //nuevos
+            inicio_devuelta = inicio_or;
+            fin_devuelta = fin_or;
+
+
+        }
+
+        public void cerraduraasterisco(Nodo inicio1aux, Nodo fin1aux)
+        {
+           
+
+            Nodo inicio1 = inicio1aux;
+            
+            Nodo fin1 = fin1aux;
+            fin1.aplicaRetorno = true;
+
+            //inicio2->inicio1
+            Nodo Inicio2 = new Nodo(estado.ToString()); estado++;
+            Inicio2.transicion = "ε";
+            Inicio2.agregarHijo(inicio1);
+            arbol_dot += Inicio2.valor + "->" + inicio1.valor;
+            arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
+
+            //fin1 -> inicio1
+          
+            fin1.transicion= "ε";
+            arbol_dot += fin1.valor + "->" + inicio1.valor;
+            arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
+                       
+            //fin1 -> fin2
+            Nodo fin2 = new Nodo(estado.ToString()); estado++;
+            fin2.transicion = "ε";
+            fin1.agregarHijo(fin2);
+       //     fin1.agregarHijo(inicio1);
+            arbol_dot += fin1.valor + "->" + fin2.valor;
+            arbol_dot += "[label= \"" + "ε" + "\"]\n";
+
+            //inicio2-> fin2
+            Inicio2.agregarHijo(fin2);
+            arbol_dot += Inicio2.valor + "->" + fin2.valor;
+            arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
+
+            inicio_devuelta = Inicio2;
+            fin_devuelta = fin2;
+
+           
+        }
+
+
+        public void cerradurapregunta(Nodo inicio1aux, Nodo fin1aux) {
+
+          
+
+            Nodo inicio1 = inicio1aux;
+            Nodo fin1 = fin1aux;
+
+            //inicio2->inicio1
+            Nodo Inicio2 = new Nodo(estado.ToString()); estado++;
+            Inicio2.transicion = "ε";
+            Inicio2.agregarHijo(inicio1);
+            arbol_dot += Inicio2.valor + "->" + inicio1.valor;
+            arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
+
+            
+            //fin1 -> fin2
+            Nodo fin2 = new Nodo(estado.ToString()); estado++;
+            fin2.transicion = "ε";
+            fin1.agregarHijo(fin2);
+            arbol_dot += fin1.valor + "->" + fin2.valor;
+            arbol_dot += "[label= \"" + "ε" + "\"]\n";
+
+            //inicio2-> fin2
+            Inicio2.agregarHijo(fin2);
+
+            arbol_dot += Inicio2.valor + "->" + fin2.valor;
+            arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
+
+            inicio_devuelta = Inicio2;
+            fin_devuelta = fin2;
+
+      
+
+
+
+        }
+
+
+        public void cerradurapositiva(Nodo inicio1aux, Nodo fin1aux)
+        {
+
+          
+
+            Nodo inicio1 = inicio1aux;
+          
+            Nodo fin1 = fin1aux;
+            fin1.aplicaRetorno = true;
+            //inicio2->inicio1
+            Nodo Inicio2 = new Nodo(estado.ToString()); estado++;
+            Inicio2.transicion = "ε";
+            Inicio2.agregarHijo(inicio1);
+            arbol_dot += Inicio2.valor + "->" + inicio1.valor;
+            arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
+
+            //fin1 -> inicio1
+            
+            fin1.transicion = "ε";
+            arbol_dot += fin1.valor + "->" + inicio1.valor;
+            arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
+
+            //fin1 -> fin2
+            Nodo fin2 = new Nodo(estado.ToString()); estado++;
+            fin2.transicion= "ε";
+            fin1.agregarHijo(fin2);
+            //fin1 -> inicio1
+          //  fin1.agregarHijo(inicio1);
+            arbol_dot += fin1.valor + "->" + fin2.valor;
+            arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
+
+            
+            inicio_devuelta = Inicio2;
+            fin_devuelta = fin2;
+
+
+
+
+        }
+        int estadoo = 1;
+        public String recorrer_AFND(Nodo nodo)
+        {
+            String concatena = "";
+
+            String padre = nodo.valor;
+
+
+            //   concatena += nodo.valor + "[label=\""+estadoo.ToString()+"\"]\n";
+            // estadoo++;
+            concatena += nodo.valor + "\n";
+            foreach (Nodo hijo in nodo.hijos)
+            {
+
+                if (!hijo.aplicaRetorno)
+                {
+
+                    if (!pila.Contains(nodo.valor + "->" + hijo.valor))
+                    {
+                        MessageBox.Show(nodo.valor + "->" + hijo.valor);
+                        concatena += nodo.valor + "->" + hijo.valor;
+                        concatena += "[label= \"" + nodo.transicion + "\"]\n";
+
+                        pila.AddLast(nodo.valor + "->" + hijo.valor);
+                        concatena += recorrer_AFND(hijo);
+
+
+                    }
+
+                }
+                else
+                {
+                    if (!pila.Contains(nodo.valor + "->" + hijo.valor))
+                    {
+                        MessageBox.Show(nodo.valor + "->" + hijo.valor);
+                        concatena += nodo.valor + "->" + hijo.valor;
+                        concatena += "[label= \"" + nodo.transicion + "\"]\n";
+                        pila.AddLast(nodo.valor + "->" + hijo.valor);
+                        concatena += hijo.valor + "->" + nodo.valor;
+                        concatena += "[label= \"" + "ε" + "\"]\n";
+                        pila.AddLast(hijo.valor + "->" + nodo.valor);
+                        concatena += recorrer_AFND(hijo);
+                    }
+                  
+                }
+            }
+
+
+
+            return concatena;
 
         }
 

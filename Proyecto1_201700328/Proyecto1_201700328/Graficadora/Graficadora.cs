@@ -13,7 +13,7 @@ namespace Proyecto1_201700328.Graficadora
 {
     public class Graficadora
     {
-
+        LinkedList<String> pila = new LinkedList<String>();
         public Graficadora()
         {
 
@@ -48,6 +48,56 @@ namespace Proyecto1_201700328.Graficadora
 
         }
 
+        public String recorrer_AFND(Nodo nodo)
+        {
+            String concatena = "";
+                        
+                String padre = nodo.valor;
+           
+
+                concatena += nodo.valor + "\n";
+             
+           
+                foreach (Nodo hijo in nodo.hijos)
+                {
+             
+                    if (!hijo.aplicaRetorno)
+                    {
+
+                    if (!pila.Contains(nodo.valor + "->" + hijo.valor))
+                    {
+                        concatena += nodo.valor + "->" + hijo.valor;
+                        concatena += "[label= \"" + nodo.transicion + "\"]\n";
+
+                        concatena += recorrer_AFND(hijo);
+
+                        pila.AddLast(nodo.valor + "->" + hijo.valor);
+
+                    }
+
+                    }
+                    else
+                    {
+                    if (!pila.Contains(nodo.valor + "->" + hijo.valor))
+                    {
+
+                        concatena += nodo.valor + "->" + hijo.valor;
+                        concatena += "[label= \"" + nodo.transicion + "\"]\n";
+                        pila.AddLast(nodo.valor + "->" + hijo.valor);
+                        concatena += hijo.valor + "->" + nodo.valor;
+                        concatena += "[label= \"" + "ε" + "\"]\n";
+                        pila.AddLast(hijo.valor + "->" + nodo.valor);
+                        concatena += recorrer_AFND(hijo);
+                    }
+                        
+                    }
+                }
+                
+            
+
+            return concatena;
+
+        }
         public void escribir_fichero_grafo(String info, String nombre)
         {
 

@@ -11,6 +11,7 @@ namespace Proyecto1_201700328.Analsis_thompson
     
         public String valor;
         public String transicion;
+        public Boolean aplicaRetorno;
         public LinkedList<Nodo> hijos;
 
 
@@ -20,6 +21,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             this.valor = valor;
             this.transicion = "";
             this.hijos = new LinkedList<Nodo>();
+            this.aplicaRetorno = false;
         }
 
         public void agregarHijo(Nodo hijo)
