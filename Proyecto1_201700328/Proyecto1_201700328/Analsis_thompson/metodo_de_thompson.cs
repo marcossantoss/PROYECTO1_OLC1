@@ -22,7 +22,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         LinkedList<Tablas_de_informacion> Informacion_de_cadaID = new LinkedList<Tablas_de_informacion>();
 
-    
+        String conjunto = "";
+        char estado_AFD;
 
         public metodo_de_thompson(LinkedList<Expresion_Lexema> lista_macros, LinkedList<Expresion_Lexema> lista_lexemas, LinkedList<Expresion_Lexema> lista_expresiones)
         {
@@ -221,20 +222,22 @@ namespace Proyecto1_201700328.Analsis_thompson
                     padre.agregarHijo(hijo2);
                     formarArbol(padre, expression.expresionEstructurdaenLista);
 
-               
+                    arbol_dot += "rankdir=LR; size = \"8,5\"\n";
+                    arbol_dot += "node [shape = circle];\n";
+
                     generarAFND(hijo1);
-                    //analisis de transiciones
-                    /*    LinkedList<Transicion> nueva_t_transiciones = new LinkedList<>();
-                        System.out.println("inicio----");
-                        Tabla_transiciones(padre, nueva_t_transiciones, nueva_tabla);
-                        System.out.println("fin----\n\n");
-                        */
 
+                    //la grafica como tal del AFND
+                    //   grafica.escribir_fichero_grafo(arbol_dot, expression.id + "_AFND");
+                    //   grafica.generar_Dot_grafo(expression.id + "_AFND");
 
-                    grafica.escribir_fichero_grafo(arbol_dot, expression.id);
+                    expression.raiz_arbol_expresion = padre;
+                    expression.raiz_thompson = inicio_devuelta;
+                    /*para ver el recorrido del grafo*/
+                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta), expression.id + "_AFND");
+                    grafica.generar_Dot_grafo(expression.id + "_AFND");
 
-
-                    //se procede a graficar
+                    //se procede a graficar el arbol de la expresion regular
                     grafica.escribir_fichero_grafo(grafica.recorrer_arbolito(padre) + "\n label=\"" + expression.id + "\";\n", expression.id);
                     grafica.generar_Dot_grafo(expression.id);
 
@@ -242,7 +245,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                 }
                 else
                 {// si vienen mas 
-                 //  MessageBox.Show("estoy aqui");
+
                     Nodo padre = new Nodo(".");
                     Nodo hijo1 = new Nodo(expression.expresionEstructurdaenLista.ElementAt(i));
                     Nodo hijo2 = new Nodo("#");
@@ -268,28 +271,66 @@ namespace Proyecto1_201700328.Analsis_thompson
 
 
                     //se procede a graficar
-                   
+
                     arbol_dot += "rankdir=LR; size = \"8,5\"\n";
                     arbol_dot += "node [shape = circle];\n";
 
                     generarAFND(hijo1);
-              
-                    // arbol_dot += " node[shape = doublecircle];" +estado.ToString();
 
-                    grafica.escribir_fichero_grafo(arbol_dot, expression.id + "_AFND");
+                    //la grafica como tal del AFND
+                    //   grafica.escribir_fichero_grafo(arbol_dot, expression.id + "_AFND");
+                    //   grafica.generar_Dot_grafo(expression.id + "_AFND");
+
+                    expression.raiz_arbol_expresion = padre;
+                    expression.raiz_thompson = inicio_devuelta;
+                    /*para ver el recorrido del arbol*/
+                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta), expression.id + "_AFND");
                     grafica.generar_Dot_grafo(expression.id + "_AFND");
 
-                    /*para ver el recorrido del arbol*/
-                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n"+ "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta), expression.id + "_AFNDrecorrido");
-                    grafica.generar_Dot_grafo(expression.id + "_AFNDrecorrido");
 
-                    
-                  
 
                     /*reccorido pulido*/
-                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = circle];\n" +recorrer_AFND(inicio_devuelta), expression.id + "_AFNDpulido");
-                    grafica.generar_Dot_grafo(expression.id + "_AFNDpulido");
+                    /*mandamos hacer analisis de transiciones*/
+                    //tamamos lo simbolos que se analizaran en las cerraduras
+                    LinkedList<String> objetos_analizar = new LinkedList<string>();
+                    nodos_hoja(hijo1,objetos_analizar);
+                    Console.WriteLine("\n\nOBJETOS DE ANALISIS EN LAS CERRADURAS");
+                    int num = 0;
+                    foreach (String objeto in objetos_analizar) {
+                        Console.WriteLine("No."+num+" objeto ->" +objeto);
+                        num++;
+                    }
+                    
+                    Console.WriteLine(" ------------------- ");
+                    //limpiamos la pila por seguridad
+                    pila.Clear();
 
+                    //creamos nuestra lista de transiciones
+                    LinkedList<Transicion> transiciones = new LinkedList<Transicion>();
+
+                    //usamos el metodo "recorrer_obtener_conjunto" para obtener el conjunto inicial y por ende el primer estado A
+                    conjunto =  recorrer_obtener_conjunto(inicio_devuelta);
+                    //limpiamos la cadena puesto que hay una coma de mas al final , por lo tanto se quita
+                    conjunto = conjunto.Remove(conjunto.Count()-1,1);
+                    Boolean esunestadodeaceptacion = false;
+                    if (conjunto.Contains(fin_devuelta.valor))
+                    {
+                        esunestadodeaceptacion = true;
+                    }
+
+                    transiciones.AddLast(new Transicion("A",conjunto,esunestadodeaceptacion));
+                    MessageBox.Show("El estado es: "+"A\n"+"El conjunto inicial es: "+conjunto);
+                    //limpiamos puesto que vamos a recorrer nuevamente el arbol
+                    
+                    pila.Clear();
+                     
+                    estado_AFD = 'A';
+                    //AQUI inicia el metodo para analizar los estados futuros asi como sus conjuntos
+                    analizar_transiciones(transiciones,conjunto,fin_devuelta.valor,1,objetos_analizar,inicio_devuelta);
+                    conjunto = "";
+
+
+                    /*grafica el arbol de a expresion*/
                     grafica.escribir_fichero_grafo(grafica.recorrer_arbolito(padre) + "\n label=\"" + expression.id + "\";\n", expression.id);
                     grafica.generar_Dot_grafo(expression.id);
 
@@ -298,7 +339,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                 //limpiamos nuestros operadores
                 i = 0;
                 arbol_dot = "";
-                
+
                 estado = 0;
                 pila.Clear();
             }
@@ -367,6 +408,34 @@ namespace Proyecto1_201700328.Analsis_thompson
             }
 
         }
+
+        /*me da un listado de las hojas o nodos de la lista*/
+
+        public void nodos_hoja(Nodo raiz, LinkedList<String> objetos)
+        {
+
+            if (raiz.hijos.Count ==0)
+            {//si son nodos hoja
+
+                if (!objetos.Contains(raiz.valor))
+                {
+                    objetos.AddLast(raiz.valor);
+
+                }
+
+            }
+            else
+            {
+
+                foreach (Nodo hijo in raiz.hijos)
+                {
+
+                    //siempre toma primero al hijo 1 y despues al hijo2
+                   nodos_hoja(hijo,objetos);
+                }
+            }
+        }
+
         int hijoizquierdo = 0;
         int hijoderecho = 1;
 
@@ -387,10 +456,11 @@ namespace Proyecto1_201700328.Analsis_thompson
         Nodo fin_devuelta = null;
 
 
-       // Nodo[] datoIzquierdo = null;
-       // Nodo[] datoDerecho = null;
+        // Nodo[] datoIzquierdo = null;
+        // Nodo[] datoDerecho = null;
 
-        public void generarAFND(Nodo raiz) {
+        public void generarAFND(Nodo raiz)
+        {
 
 
             if (raiz.valor.Equals("."))
@@ -400,11 +470,11 @@ namespace Proyecto1_201700328.Analsis_thompson
                 generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
                 izquierda_inicio_and = inicio_devuelta;
                 izquierda_fin_and = fin_devuelta;
-        
+
                 generarAFND(raiz.hijos.ElementAt(hijoderecho));
                 derecha_inicio_and = inicio_devuelta;
                 derecha_fin_and = fin_devuelta;
-                concatenacion(izquierda_inicio_and,izquierda_fin_and,derecha_inicio_and,derecha_fin_and);
+                concatenacion(izquierda_inicio_and, izquierda_fin_and, derecha_inicio_and, derecha_fin_and);
 
 
             }
@@ -429,7 +499,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                 //hereda un hijo
                 generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
 
-                cerraduraasterisco(inicio_devuelta,fin_devuelta);
+                cerraduraasterisco(inicio_devuelta, fin_devuelta);
 
 
             }
@@ -439,16 +509,20 @@ namespace Proyecto1_201700328.Analsis_thompson
                 generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
 
 
-                cerradurapositiva(inicio_devuelta,fin_devuelta);
+                cerradurapositiva(inicio_devuelta, fin_devuelta);
 
-            } else if (raiz.valor.Equals("?")) {
+            }
+            else if (raiz.valor.Equals("?"))
+            {
                 //herada un hijo
-                 generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
+                generarAFND(raiz.hijos.ElementAt(hijoizquierdo));
 
 
-                 cerradurapregunta(inicio_devuelta,fin_devuelta);
+                cerradurapregunta(inicio_devuelta, fin_devuelta);
 
-            } else {
+            }
+            else
+            {
 
                 //de una hoja
                 //retornar un simbolo o epsilon
@@ -456,23 +530,22 @@ namespace Proyecto1_201700328.Analsis_thompson
                 return;
 
             }
-            
+
         }
 
 
-
-
-
+               
 
         /*VAMOS A INCLUIR METODOS PARA AGREGAR SOLAMENTE LOS BLOQUES SEGUN LA CERRADURA*/
 
 
-        public void simbolo(String simbolo) {
+        public void simbolo(String simbolo)
+        {
 
-         
-            
 
-           Nodo inicio = new Nodo(estado.ToString()); estado++;
+
+
+            Nodo inicio = new Nodo(estado.ToString()); estado++;
             inicio.transicion = simbolo;
             inicio_devuelta = inicio;
 
@@ -485,12 +558,12 @@ namespace Proyecto1_201700328.Analsis_thompson
 
 
 
-           
+
 
 
         }
 
-        public void concatenacion(Nodo inicio1aux, Nodo fin1aux,Nodo inicio2aux, Nodo fin2aux)
+        public void concatenacion(Nodo inicio1aux, Nodo fin1aux, Nodo inicio2aux, Nodo fin2aux)
         {
 
             Nodo inicio1 = inicio1aux;
@@ -501,9 +574,9 @@ namespace Proyecto1_201700328.Analsis_thompson
             fin1.transicion = "ε";
             fin1.agregarHijo(inicio2);
 
-          
-            arbol_dot += fin1.valor+ "->" + inicio2.valor;
-           // fin1.agregarHijo(inicio2);
+
+            arbol_dot += fin1.valor + "->" + inicio2.valor;
+            // fin1.agregarHijo(inicio2);
             arbol_dot += "[label= \"" + "ε" + "\"]\n";
 
 
@@ -540,11 +613,11 @@ namespace Proyecto1_201700328.Analsis_thompson
             Nodo fin_or = new Nodo(estado.ToString()); estado++;
 
             fin1.agregarHijo(fin_or);
-            fin1.transicion= "ε";
+            fin1.transicion = "ε";
             fin2.agregarHijo(fin_or);
             fin2.transicion = "ε";
 
-            arbol_dot += fin1.valor + "->" +fin_or.valor;
+            arbol_dot += fin1.valor + "->" + fin_or.valor;
             arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
 
             arbol_dot += fin2.valor + "->" + fin_or.valor;
@@ -561,10 +634,10 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         public void cerraduraasterisco(Nodo inicio1aux, Nodo fin1aux)
         {
-           
+
 
             Nodo inicio1 = inicio1aux;
-            
+
             Nodo fin1 = fin1aux;
             fin1.aplicaRetorno = true;
 
@@ -576,16 +649,16 @@ namespace Proyecto1_201700328.Analsis_thompson
             arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
 
             //fin1 -> inicio1
-          
-            fin1.transicion= "ε";
+
+            fin1.transicion = "ε";
             arbol_dot += fin1.valor + "->" + inicio1.valor;
             arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
-                       
+
             //fin1 -> fin2
             Nodo fin2 = new Nodo(estado.ToString()); estado++;
             fin2.transicion = "ε";
             fin1.agregarHijo(fin2);
-       //     fin1.agregarHijo(inicio1);
+            //     fin1.agregarHijo(inicio1);
             arbol_dot += fin1.valor + "->" + fin2.valor;
             arbol_dot += "[label= \"" + "ε" + "\"]\n";
 
@@ -597,17 +670,19 @@ namespace Proyecto1_201700328.Analsis_thompson
             inicio_devuelta = Inicio2;
             fin_devuelta = fin2;
 
-           
+
         }
 
 
-        public void cerradurapregunta(Nodo inicio1aux, Nodo fin1aux) {
+        public void cerradurapregunta(Nodo inicio1aux, Nodo fin1aux)
+        {
 
-          
+
 
             Nodo inicio1 = inicio1aux;
             Nodo fin1 = fin1aux;
 
+            fin1.transicion= "ε";
             //inicio2->inicio1
             Nodo Inicio2 = new Nodo(estado.ToString()); estado++;
             Inicio2.transicion = "ε";
@@ -615,7 +690,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             arbol_dot += Inicio2.valor + "->" + inicio1.valor;
             arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
 
-            
+
             //fin1 -> fin2
             Nodo fin2 = new Nodo(estado.ToString()); estado++;
             fin2.transicion = "ε";
@@ -632,7 +707,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             inicio_devuelta = Inicio2;
             fin_devuelta = fin2;
 
-      
+
 
 
 
@@ -642,10 +717,10 @@ namespace Proyecto1_201700328.Analsis_thompson
         public void cerradurapositiva(Nodo inicio1aux, Nodo fin1aux)
         {
 
-          
+
 
             Nodo inicio1 = inicio1aux;
-          
+
             Nodo fin1 = fin1aux;
             fin1.aplicaRetorno = true;
             //inicio2->inicio1
@@ -656,21 +731,21 @@ namespace Proyecto1_201700328.Analsis_thompson
             arbol_dot += "[label= \"" + Inicio2.transicion + "\"]\n";
 
             //fin1 -> inicio1
-            
+
             fin1.transicion = "ε";
             arbol_dot += fin1.valor + "->" + inicio1.valor;
             arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
 
             //fin1 -> fin2
             Nodo fin2 = new Nodo(estado.ToString()); estado++;
-            fin2.transicion= "ε";
+            fin2.transicion = "ε";
             fin1.agregarHijo(fin2);
             //fin1 -> inicio1
-          //  fin1.agregarHijo(inicio1);
+            //  fin1.agregarHijo(inicio1);
             arbol_dot += fin1.valor + "->" + fin2.valor;
             arbol_dot += "[label= \"" + fin1.transicion + "\"]\n";
 
-            
+
             inicio_devuelta = Inicio2;
             fin_devuelta = fin2;
 
@@ -679,57 +754,230 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         }
         int estadoo = 1;
-        public String recorrer_AFND(Nodo nodo)
+
+        
+        public String recorrer_obtener_conjunto(Nodo inicio_AFND)
         {
-            String concatena = "";
+            String conjunto = "";
 
-            String padre = nodo.valor;
+            Nodo padreActual = inicio_AFND;
 
+            Boolean recorrehijos = true;
 
-            //   concatena += nodo.valor + "[label=\""+estadoo.ToString()+"\"]\n";
-            // estadoo++;
-            concatena += nodo.valor + "\n";
-            foreach (Nodo hijo in nodo.hijos)
+            if (padreActual.transicion.Equals("ε"))
             {
-
-                if (!hijo.aplicaRetorno)
+                if (!pila.Contains(padreActual.valor + "°"))
                 {
-
-                    if (!pila.Contains(nodo.valor + "->" + hijo.valor))
+                    if (padreActual.aplicaRetorno)
                     {
-                        MessageBox.Show(nodo.valor + "->" + hijo.valor);
-                        concatena += nodo.valor + "->" + hijo.valor;
-                        concatena += "[label= \"" + nodo.transicion + "\"]\n";
+                        conjunto += Convert.ToString(Convert.ToInt32(padreActual.valor) - 1) + "°";
+                        conjunto += padreActual.valor + "°";
 
-                        pila.AddLast(nodo.valor + "->" + hijo.valor);
-                        concatena += recorrer_AFND(hijo);
-
-
+                        pila.AddLast(Convert.ToString(Convert.ToInt32(padreActual.valor) - 1) + "°");
+                        pila.AddLast(padreActual.valor + "°");
+                    //    conjunto += recorrer_obtener_conjunto(h);
                     }
-
-                }
-                else
-                {
-                    if (!pila.Contains(nodo.valor + "->" + hijo.valor))
+                    else
                     {
-                        MessageBox.Show(nodo.valor + "->" + hijo.valor);
-                        concatena += nodo.valor + "->" + hijo.valor;
-                        concatena += "[label= \"" + nodo.transicion + "\"]\n";
-                        pila.AddLast(nodo.valor + "->" + hijo.valor);
-                        concatena += hijo.valor + "->" + nodo.valor;
-                        concatena += "[label= \"" + "ε" + "\"]\n";
-                        pila.AddLast(hijo.valor + "->" + nodo.valor);
-                        concatena += recorrer_AFND(hijo);
+                        conjunto += padreActual.valor + "°";
+                        pila.AddLast(padreActual.valor + "°");
                     }
-                  
-                }
+                    } 
+            }
+            else {
+                //si ya no hay transiciones con epsilon me salgo
+                recorrehijos = false;
+                conjunto = "";
             }
 
 
+            if (recorrehijos)
+            {
+                foreach (Nodo hijo in padreActual.hijos)
+                {
 
-            return concatena;
+                    if (!hijo.aplicaRetorno)
+                    {
+                        if (!pila.Contains(hijo.valor + "°"))
+                        {
+
+                            conjunto += hijo.valor + "°";
+                            pila.AddLast(hijo.valor + "°");
+                            conjunto += recorrer_obtener_conjunto(hijo);
+                        }
+
+                    }
+                    else
+                    {
+                     //   MessageBox.Show("tengo que aplicar el retorno");
+                        if (!pila.Contains(hijo.valor + "°"))
+                        {
+                            conjunto += Convert.ToString(Convert.ToInt32(hijo.valor) - 1) + "°";
+                            conjunto += hijo.valor + "°";
+
+                            pila.AddLast(Convert.ToString(Convert.ToInt32(hijo.valor) - 1) + "°");
+                            pila.AddLast(hijo.valor + "°");
+                            conjunto += recorrer_obtener_conjunto(hijo);
+                        }
+                    }
+
+
+                }
+            }
+
+            return conjunto;
+        }
+
+        int index = 0;
+        public void analizar_transiciones(LinkedList<Transicion> transiciones, String conjuntoActual, String estadoAceptacion,int estados_nuevos,LinkedList<String> simbolos,Nodo inicio_thompson) {
+
+
+            //verificamos si hay que continuar con la recursion
+            if (estados_nuevos > 0) {
+
+                //por cada simbolo del sistema procedemos a buscar sus nuevos conjuntos
+                int estadosubsiguientes=0;
+               
+                foreach (String simbolo in simbolos) {
+                    String conjunto_nuevo = "";
+
+                    String[] conjunto = conjuntoActual.Split('°');
+
+                  
+                    foreach (String elemento in conjunto) {
+                        MessageBox.Show("el elemento es: "+elemento + "\nEl simbolo es: "+ simbolo);
+                       buscarNodo(inicio_thompson, elemento, simbolo);
+                        Nodo ir = nodo_encontrado_de_la_busqueda;
+                        if (ir != null )
+                        {
+                              MessageBox.Show("ir tiene: "+ ir.valor+ "Tiene retorno :"+ir.aplicaRetorno.ToString());
+                           
+                            //vamos a buscar sus datos y los concatenamos al nuevo conjunto
+                            conjunto_nuevo += recorrer_obtener_conjunto(ir);
+                            
+                            nodo_encontrado_de_la_busqueda = null;
+                            
+                         } 
+                    }
+                    
+                    //agrego el nuevo estado
+                    if (!conjunto_nuevo.Equals(""))
+                    {
+                        conjunto_nuevo = conjunto_nuevo.Remove(conjunto_nuevo.Count() - 1, 1);
+                        pila.Clear();
+                        MessageBox.Show("estoy aqui mostrando conjunto:" + conjunto_nuevo);
+                        String estado = buscarEstado(transiciones, conjunto_nuevo);
+                        if (estado.Equals(""))
+                        {
+                            estado_AFD++;
+                            char Estadoo_nuevvo = estado_AFD;
+                         
+
+                            transiciones.ElementAt(index).getEstadosSiguientes().AddLast(Estadoo_nuevvo + "¬" + simbolo);
+                            Boolean esunestadodeaceptacion = false;
+                            if (conjunto.Contains(fin_devuelta.valor))
+                            {
+                                esunestadodeaceptacion = true;
+                            }
+                            transiciones.AddLast(new Transicion(Convert.ToString(Estadoo_nuevvo), conjunto_nuevo, esunestadodeaceptacion));
+                            MessageBox.Show("El estado es: " + Estadoo_nuevvo + "\n" + "El conjunto inicial es: " + conjunto_nuevo);
+
+                            estadosubsiguientes++;
+                            index++;
+                            analizar_transiciones(transiciones,conjunto_nuevo,estadoAceptacion,estadosubsiguientes,simbolos,inicio_thompson);
+                            //aqui mando a ejecutar transiciones el metodo otra vez 
+                        }
+                        else {
+
+
+                            transiciones.ElementAt(index).getEstadosSiguientes().AddLast(estado + "¬" + simbolo);
+                         ///   Boolean esunestadodeaceptacion = false;
+                          //  if (conjunto.Contains(fin_devuelta.valor))
+                         //   {
+                       //         esunestadodeaceptacion = true;
+                     //      }
+                         //   transiciones.AddLast(new Transicion(Convert.ToString(estado), conjunto_nuevo, esunestadodeaceptacion));
+                            
+
+                        }
+                    }
+
+
+
+                    //fin for
+                }
+
+
+
+
+
+
+
+
+
+            }
+            else{
+                //iniciamos el retorno de la recursion
+                return;
+
+            }
+
 
         }
 
+
+
+        Nodo nodo_encontrado_de_la_busqueda = null;
+        public void buscarNodo(Nodo nodo_actual,String estado,String transicion) {
+            
+            Nodo buscado = null;
+            Nodo padreActual = nodo_actual;
+
+            
+
+             foreach (Nodo hijo in padreActual.hijos)
+                {
+                buscarNodo(hijo,estado,transicion);
+                    if (padreActual.valor.Equals(estado))
+                    {
+
+                        if (padreActual.transicion.Equals(transicion))
+                        {
+
+
+                        MessageBox.Show("NODO ENCONTRADO\n" + "Estado: " + padreActual.valor + "\n" + "Con transicion:" + padreActual.transicion + "\n" + "hijo a retornar: " + hijo.valor);
+
+                        nodo_encontrado_de_la_busqueda = hijo;
+                        return;
+                       //     return  hijo;
+                        
+                        }
+                   
+                }                   
+
+        }
+            
+
+            
+
+        }
+
+
+        public String buscarEstado(LinkedList<Transicion> transiciones,String conjunto) {
+
+            String seencontroEstado = "";
+            foreach (Transicion transicion in transiciones) {
+                if (transicion.conjunto.Contains(conjunto)) {
+                    seencontroEstado = transicion.estado;
+                    break;
+                }
+            }
+
+            return seencontroEstado;
+        }
+        //fin de la clase
     }
-    }
+}
+
+    
+    
