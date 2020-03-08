@@ -358,5 +358,62 @@ namespace Proyecto1_201700328
                 MessageBox.Show("No se ha detectado una opcion de imagenes\n PULSE automatas, siguientes, arboles u automatas");
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (opcion == 1)
+            {
+
+                if (0 < interacion)
+                {
+
+                    pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
+                    interacion--;
+
+                }
+                else
+                {
+                    interacion = 0;
+                    jLabel1.setIcon(new ImageIcon(transiciones.get(interacion)));
+
+                }
+
+            }
+            else if (opcion == 2)
+            {
+
+                if (0 < interacion)
+                {
+
+                    pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                    interacion--;
+                }
+                else
+                {
+                    interacion = 0;
+                    pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                }
+            }
+            else if (opcion == 3)
+            {
+                if (0 < interacion)
+                {
+
+                    pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
+                    interacion--;
+                }
+                else
+                {
+                    interacion = 0;
+                    pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
+
+                }
+            }
+            else
+            {
+        
+                MessageBox.Show("No se ha detectado una opcion de imagenes\n PULSE automatas, siguientes, arboles u automatas");
+            }
+        }
     }
 }

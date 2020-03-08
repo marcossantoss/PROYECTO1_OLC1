@@ -50,6 +50,7 @@
     <Compile Include="Analizadores\Analisis_Sintactico.cs" />
     <Compile Include="Analizadores\Expresion_Lexema.cs" />
     <Compile Include="Analizadores\Token_lenguaje.cs" />
+    <Compile Include="Analsis_thompson\Analisis_lexemas.cs" />
     <Compile Include="Analsis_thompson\metodo_de_thompson.cs" />
     <Compile Include="Analsis_thompson\Nodo.cs" />
     <Compile Include="Analsis_thompson\Tablas_de_informacion.cs" />

@@ -358,7 +358,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                     expression.raiz_thompson = inicio_devuelta;
                     /*para ver el recorrido del arbol thompson*/
                  //   MessageBox.Show("la raiz es:" + inicio_devuelta.valor + "y el fin es :" + fin_devuelta.valor);
-                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta) , expression.id + "_AFND");
+                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta) + "\nlabel=\"" + expression.id + "\"", expression.id + "_AFND");
                     grafica.generar_Dot_grafo_svg(expression.id + "_AFND", "C:\\AFNDS\\" + expression.id + "_AFND");
                     grafica.generar_Dot_grafo_png(expression.id + "_AFND", "C:\\AFNDS\\" + expression.id + "_AFND");
                     rutas_AFND.AddLast("C:\\AFNDS\\" + expression.id + "_AFND.jpg");
