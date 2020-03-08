@@ -18,10 +18,15 @@ namespace Proyecto1_201700328
         {
             InitializeComponent();
         }
+
+        /*Esto permite el control de la aplicacion para ver las imagenes*/
         LinkedList<String> AFD;
         LinkedList<String> AFND;
         LinkedList<String> tranciones;
-       
+
+        int opcion = -1;
+        int interacion = 1;
+        
 
         public int contador_tabs = 0;
         TabPage pestana_actual = null;
@@ -197,6 +202,8 @@ namespace Proyecto1_201700328
                     hacer_analisis.procesar_expresiones();
                     hacer_analisis.thompson();
                     AFD = hacer_analisis.rutas_AFD;
+                    AFND = hacer_analisis.rutas_AFND;
+                    tranciones = hacer_analisis.rutas_transiciones;
 
                    
                 }
@@ -252,6 +259,104 @@ namespace Proyecto1_201700328
         private void expresionesRegularesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             generar_reportes.mostrar_expresionesregulares();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (tranciones.Count!=0)
+            {
+               
+                pictureBox1.Image = Image.FromFile(AFND.First());
+                opcion = 3;
+                interacion = 1;
+            }
+            else
+            {
+                MessageBox.Show("LISTA VACIA");
+             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (tranciones.Count != 0)
+            {
+
+                pictureBox1.Image = Image.FromFile(tranciones.First());
+                opcion = 1;
+                interacion = 1;
+            }
+            else
+            {
+                MessageBox.Show("LISTA VACIA");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (tranciones.Count != 0)
+            {
+
+                pictureBox1.Image = Image.FromFile(AFD.First());
+                opcion = 2;
+                interacion = 1;
+            }
+            else
+            {
+                MessageBox.Show("LISTA VACIA");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (opcion == 1)
+            {
+
+                if (interacion < tranciones.Count)
+                {
+                 
+                    pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
+                    interacion++;
+                }
+                else
+                {
+                    interacion = 0;
+                    pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
+
+                }
+
+            }
+            else if (opcion == 2)
+            {
+
+                if (interacion < AFD.Count)
+                {
+                    pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                    interacion++;
+                }
+                else
+                {
+                    interacion = 0;
+                    pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                }
+            }
+            else if (opcion == 3)
+            {
+                if (interacion < AFND.Count)
+                {
+                    pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
+                    interacion++;
+                }
+                else
+                {
+                    interacion = 0;
+                    pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
+
+                }
+            } else
+            {
+  
+                MessageBox.Show("No se ha detectado una opcion de imagenes\n PULSE automatas, siguientes, arboles u automatas");
+            }
         }
     }
 }

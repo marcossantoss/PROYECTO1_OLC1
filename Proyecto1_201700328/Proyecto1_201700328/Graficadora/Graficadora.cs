@@ -13,7 +13,7 @@ namespace Proyecto1_201700328.Graficadora
 {
     public class Graficadora
     {
-        LinkedList<String> pila = new LinkedList<String>();
+       public LinkedList<String> pila = new LinkedList<String>();
         public Graficadora()
         {
 

@@ -347,18 +347,18 @@ namespace Proyecto1_201700328.Analsis_thompson
                     arbol_dot += "rankdir=LR; size = \"8,5\"\n";
                     arbol_dot += "node [shape = circle];\n";
 
-
+                    grafica.pila.Clear();
                     generarAFND(hijo1);
 
                     //la grafica como tal del AFND
                     //   grafica.escribir_fichero_grafo(arbol_dot, expression.id + "_AFND");
                     ///    grafica.generar_Dot_grafo(expression.id + "_AFND");
-
+                    
                     expression.raiz_arbol_expresion = padre;
                     expression.raiz_thompson = inicio_devuelta;
                     /*para ver el recorrido del arbol thompson*/
                  //   MessageBox.Show("la raiz es:" + inicio_devuelta.valor + "y el fin es :" + fin_devuelta.valor);
-                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta), expression.id + "_AFND");
+                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta) , expression.id + "_AFND");
                     grafica.generar_Dot_grafo_svg(expression.id + "_AFND", "C:\\AFNDS\\" + expression.id + "_AFND");
                     grafica.generar_Dot_grafo_png(expression.id + "_AFND", "C:\\AFNDS\\" + expression.id + "_AFND");
                     rutas_AFND.AddLast("C:\\AFNDS\\" + expression.id + "_AFND.jpg");
@@ -410,17 +410,17 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //analisis de transiciones
                     /*para ver el recorrido del arbol*/
-                    grafica.escribir_fichero_grafo(grafica.hacer_table_transiciones(transiciones), expression.id + "_TRANSICIONES");
+                    grafica.escribir_fichero_grafo(grafica.hacer_table_transiciones(transiciones) + "\nlabel=\"" + expression.id + "\"", expression.id + "_TRANSICIONES");
                     grafica.generar_Dot_grafo_svg(expression.id + "_TRANSICIONES", "C:\\TRANS\\" + expression.id + "_TRANSICIONES");
                     grafica.generar_Dot_grafo_png(expression.id + "_TRANSICIONES", "C:\\TRANS\\" + expression.id + "_TRANSICIONES");
-                    rutas_AFND.AddLast("C:\\TRANS\\" + expression.id + "_TRANSICIONES.jpg");
+                    rutas_transiciones.AddLast("C:\\TRANS\\" + expression.id + "_TRANSICIONES.jpg");
 
 
 
-                    grafica.escribir_fichero_grafo(grafica.hacer_automata(transiciones), expression.id + "_AFD");
+                    grafica.escribir_fichero_grafo(grafica.hacer_automata(transiciones)+"\nlabel=\""+expression.id+"\"", expression.id + "_AFD");
                     grafica.generar_Dot_grafo_svg(expression.id + "_AFD", "C:\\AFDS\\" + expression.id + "_AFD");
                     grafica.generar_Dot_grafo_png(expression.id + "_AFD", "C:\\AFDS\\" + expression.id + "_AFD");
-                    rutas_AFND.AddLast("C:\\AFDS\\" + expression.id + "_AFD.jpg");
+                    rutas_AFD.AddLast("C:\\AFDS\\" + expression.id + "_AFD.jpg");
 
 
                     conjunto = "";
@@ -432,9 +432,14 @@ namespace Proyecto1_201700328.Analsis_thompson
                 //limpiamos nuestros operadores
                 i = 0;
                 arbol_dot = "";
-
+                fin_devuelta = null;
+                inicio_devuelta = null;
+                seencontroEstado = "";
+                nodo_encontrado_de_la_busqueda = null;
+                
                 estado = 0;
                 pila.Clear();
+                index = 0;
             }
 
         }
