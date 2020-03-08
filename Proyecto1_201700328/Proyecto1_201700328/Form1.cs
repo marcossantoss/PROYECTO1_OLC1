@@ -18,6 +18,11 @@ namespace Proyecto1_201700328
         {
             InitializeComponent();
         }
+        LinkedList<String> AFD;
+        LinkedList<String> AFND;
+        LinkedList<String> tranciones;
+       
+
         public int contador_tabs = 0;
         TabPage pestana_actual = null;
 
@@ -191,6 +196,8 @@ namespace Proyecto1_201700328
                     metodo_de_thompson hacer_analisis = new metodo_de_thompson(analizar_sintacticamente.Macros, analizar_sintacticamente.Lexemas, analizar_sintacticamente.ExpresionesRegulares);
                     hacer_analisis.procesar_expresiones();
                     hacer_analisis.thompson();
+                    AFD = hacer_analisis.rutas_AFD;
+
                    
                 }
 
