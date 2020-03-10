@@ -60,12 +60,12 @@ namespace Proyecto1_201700328.Graficadora
 
                 concatena += nodo.valor + "\n";
 
-
+          //      MessageBox.Show("EL nodo es: "+padre+" y "+ "aplicaretorno "+nodo.aplicaRetorno);
 
                 foreach (Nodo hijo in nodo.hijos)
                 {
 
-                    if (!hijo.aplicaRetorno)
+                    if (!nodo.aplicaRetorno)
                     {
 
                         if (!pila.Contains(nodo.valor + "->" + hijo.valor))
@@ -84,11 +84,11 @@ namespace Proyecto1_201700328.Graficadora
                     {
                         if (!pila.Contains(nodo.valor + "->" + hijo.valor))
                         {
-
+                        //    MessageBox.Show("aplicando retorno en grafico"+ "nodo valor:"+nodo.valor);
                             concatena += nodo.valor + "->" + hijo.valor;
                             concatena += "[label= \"" + nodo.transicion + "\"]\n";
                             pila.AddLast(nodo.valor + "->" + hijo.valor);
-                            concatena += hijo.valor + "->" + nodo.valor;
+                            concatena += nodo.valor +"->" + Convert.ToString(Convert.ToInt64(nodo.valor) - 1);
                             concatena += "[label= \"" + "ε" + "\"]\n";
                             pila.AddLast(hijo.valor + "->" + nodo.valor);
                             concatena += recorrer_AFND(hijo);

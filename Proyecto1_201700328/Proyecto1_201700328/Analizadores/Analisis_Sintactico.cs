@@ -96,6 +96,7 @@ namespace Proyecto1_201700328.Analizadores
             //CONJUNTOS ->: id flecha TIPO_C
             match(Token_lenguaje.TOKEN.DOSPUNTOS);
             id_auxiliar = simbolo_preanalisis.getLexema().ToString();
+
             match(Token_lenguaje.TOKEN.ID);
 
             match(Token_lenguaje.TOKEN.FLECHA);
@@ -138,7 +139,7 @@ namespace Proyecto1_201700328.Analizadores
         {
             Lexemas.AddLast(new Expresion_Lexema(id_auxiliar, simbolo_preanalisis.getLexema().ToString()));
             match(Token_lenguaje.TOKEN.CADENA);
-
+            match(Token_lenguaje.TOKEN.PTOCOMA);
         }
 
         private void TIPO_C()

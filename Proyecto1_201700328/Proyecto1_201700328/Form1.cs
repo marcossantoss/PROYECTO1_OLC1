@@ -374,7 +374,7 @@ namespace Proyecto1_201700328
                 else
                 {
                     interacion = 0;
-                    jLabel1.setIcon(new ImageIcon(transiciones.get(interacion)));
+                    pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
 
                 }
 

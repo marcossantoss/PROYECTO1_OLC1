@@ -208,10 +208,11 @@ namespace Proyecto1_201700328.Analizadores
                     //---------------------------------------------------------------------------------------------------------
                     case 5://concatena la cadena
 
-                        if (charActual =='\n')
+                        if (charActual ==';')
                         {
                            //solamente concateno la expresion
                             aceptarToken(Token_lenguaje.TOKEN.CADENA, lexema, fila, columna);
+                            aceptarToken(Token_lenguaje.TOKEN.PTOCOMA, charActual, fila, columna);
                         }
                         else
                         {
@@ -322,6 +323,11 @@ namespace Proyecto1_201700328.Analizadores
 
                                     if (AnalisisCorrecto)
                                     {
+
+                                  
+
+
+
                                         aceptarToken(Token_lenguaje.TOKEN.EXPRESION, lexema, fila, columna);
                                     }
 
