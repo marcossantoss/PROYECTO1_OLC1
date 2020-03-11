@@ -29,6 +29,8 @@ namespace Proyecto1_201700328.Analsis_thompson
         public LinkedList<String> rutas_transiciones = new LinkedList<String>();
         public LinkedList<String> rutas_AFD = new LinkedList<String>();
 
+
+        public String log="";
         String conjunto = "";
         char estado_AFD;
 
@@ -319,7 +321,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //hacemos el analisis de los lexemas
                     Analisis_lexemas analizar_lexemas = new Analisis_lexemas(lista_macros, lista_lexemas, transiciones, expression.id);
-                    analizar_lexemas.analizar_lexema();
+                     log=  analizar_lexemas.analizar_lexema();
+                    MessageBox.Show("Esto es lo que hay en log \n"+ log);
                     conjunto = "";
 
 
@@ -434,7 +437,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //hacemos el analisis de los lexemas
                     Analisis_lexemas analizar_lexemas = new Analisis_lexemas(lista_macros, lista_lexemas, transiciones, expression.id);
-                    analizar_lexemas.analizar_lexema();
+                    log = analizar_lexemas.analizar_lexema();
+                    MessageBox.Show("Esto es lo que hay en log \n" + log);
                     conjunto = "";
 
 

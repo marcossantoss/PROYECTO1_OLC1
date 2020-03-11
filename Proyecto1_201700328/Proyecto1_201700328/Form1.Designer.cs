@@ -370,10 +370,10 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
+        public System.Windows.Forms.RichTextBox richTextBox2;
     }
 }
 

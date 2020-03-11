@@ -205,6 +205,7 @@ namespace Proyecto1_201700328
                     AFND = hacer_analisis.rutas_AFND;
                     tranciones = hacer_analisis.rutas_transiciones;
 
+                    richTextBox2.Text = hacer_analisis.log+"\nfin2";
                    
                 }
 
