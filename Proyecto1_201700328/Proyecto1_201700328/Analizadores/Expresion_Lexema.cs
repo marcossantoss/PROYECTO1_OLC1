@@ -11,11 +11,15 @@ namespace Proyecto1_201700328.Analizadores
         //almacena id y la expresion pero en forma de cadena
         private String Identiicador;
         private String Contenido;
+        public int fila;
+        public int columna;
 
-        public Expresion_Lexema(String Identiicador, String Contenido)
+        public Expresion_Lexema(String Identiicador, String Contenido,int fila,int columna)
         {
             this.Identiicador = Identiicador;
             this.Contenido = Contenido;
+            this.fila = fila;
+            this.columna = columna;
         }
 
         /**

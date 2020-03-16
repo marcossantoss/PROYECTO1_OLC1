@@ -130,14 +130,14 @@ namespace Proyecto1_201700328.Analizadores
 
         private void EXPRESION()
         {
-            ExpresionesRegulares.AddLast(new Expresion_Lexema(id_auxiliar, simbolo_preanalisis.getLexema().ToString()));
+            ExpresionesRegulares.AddLast(new Expresion_Lexema(id_auxiliar, simbolo_preanalisis.getLexema().ToString(), simbolo_preanalisis.getFila(),simbolo_preanalisis.getColumna()));
             match(Token_lenguaje.TOKEN.EXPRESION);
             match(Token_lenguaje.TOKEN.PTOCOMA);
         }
 
         private void LEXEMA()
         {
-            Lexemas.AddLast(new Expresion_Lexema(id_auxiliar, simbolo_preanalisis.getLexema().ToString()));
+            Lexemas.AddLast(new Expresion_Lexema(id_auxiliar, simbolo_preanalisis.getLexema().ToString(), simbolo_preanalisis.getFila(), simbolo_preanalisis.getColumna()));
             match(Token_lenguaje.TOKEN.CADENA);
             match(Token_lenguaje.TOKEN.PTOCOMA);
         }
@@ -148,8 +148,9 @@ namespace Proyecto1_201700328.Analizadores
             if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.CONJUNTOFINITIO)
             {
                 //EXPRESIONES_LEXEMAS -> flecha EXPRESION
+                
                 String contenido = simbolo_preanalisis.getLexema().ToString();
-                Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido));
+                Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido, simbolo_preanalisis.getFila(), simbolo_preanalisis.getColumna()));
 
                 match(Token_lenguaje.TOKEN.CONJUNTOFINITIO);
                 match(Token_lenguaje.TOKEN.PTOCOMA);
@@ -159,7 +160,7 @@ namespace Proyecto1_201700328.Analizadores
             {
                 //EXPRESIONES_LEXEMAS -> flecha EXPRESION
                 String contenido = simbolo_preanalisis.getLexema().ToString();
-                Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido));
+                Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido, simbolo_preanalisis.getFila(), simbolo_preanalisis.getColumna()));
 
                 match(Token_lenguaje.TOKEN.MACROS);
 

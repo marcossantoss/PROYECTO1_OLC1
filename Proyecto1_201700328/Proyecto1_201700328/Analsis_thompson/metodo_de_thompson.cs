@@ -321,8 +321,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //hacemos el analisis de los lexemas
                     Analisis_lexemas analizar_lexemas = new Analisis_lexemas(lista_macros, lista_lexemas, transiciones, expression.id);
-                     log=  analizar_lexemas.analizar_lexema();
-                    MessageBox.Show("Esto es lo que hay en log \n"+ log);
+                     log+=  analizar_lexemas.analizar_lexema()+"\n";
+                 //   MessageBox.Show("Esto es lo que hay en log \n"+ log);
                     conjunto = "";
 
 
@@ -437,8 +437,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //hacemos el analisis de los lexemas
                     Analisis_lexemas analizar_lexemas = new Analisis_lexemas(lista_macros, lista_lexemas, transiciones, expression.id);
-                    log = analizar_lexemas.analizar_lexema();
-                    MessageBox.Show("Esto es lo que hay en log \n" + log);
+                    log += analizar_lexemas.analizar_lexema() + "\n";
+                  //  MessageBox.Show("Esto es lo que hay en log \n" + log);
                     conjunto = "";
 
 

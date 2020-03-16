@@ -19,6 +19,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         String Id;
 
+        String salida_xml = "";
+        int aux =1;
         public Analisis_lexemas(LinkedList<Expresion_Lexema> lista_macros, LinkedList<Expresion_Lexema> lista_lexemas, LinkedList<Transicion> Transiciones, String id)
         {
             this.lista_macros = lista_macros;
@@ -36,7 +38,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             //iniciamos con el analisis de cada cadena segun el id
             foreach (Expresion_Lexema lexema in lista_lexemas) {
                 String contendio = "";
-                MessageBox.Show("Id actual: " + Id);
+              //  MessageBox.Show("Id actual: " + Id);
                 //aqui le decimos que solo analice las que tengan el id actual
                 if (lexema.getIdentiicador().Equals(Id)) {
 
@@ -60,7 +62,7 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //limpiamos la cadena quitandole las comillas doble de inicio fin
                     contendio = contendio.Substring(1, posicion - 1);
-                    MessageBox.Show(Id + " - " + contendio);
+                  //  MessageBox.Show(Id + " - " + contendio);
 
                     //ahora que ya tenemos la cadena limpia sin comillas dobles
                     //eestado inicial siempre es 0
@@ -68,7 +70,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                     String estado = Transiciones.ElementAt(index_de_recorrido_de_estado).estado;
 
 
-                    MessageBox.Show("el estado inicial :" + estado);
+                //    MessageBox.Show("el estado inicial :" + estado);
                     Boolean lexema_valido = true;
 
 
@@ -81,7 +83,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                         LinkedList<String> traslados = Transiciones.ElementAt(index_de_recorrido_de_estado).estados_siguientes;
                         bool caracter_valido = false;
                         String estadoalquevoy = "";
-                        MessageBox.Show("El estado actual es: " + Transiciones.ElementAt(index_de_recorrido_de_estado).estado+"\n y el index es: "+index_de_recorrido_de_estado);
+                  //      MessageBox.Show("El estado actual es: " + Transiciones.ElementAt(index_de_recorrido_de_estado).estado+"\n y el index es: "+index_de_recorrido_de_estado);
                         foreach (String traslado in traslados)
                         {
 
@@ -91,17 +93,17 @@ namespace Proyecto1_201700328.Analsis_thompson
                             String elemento_transicion = tran[1];
                             //esto a primera instancia puede devolver esto
                             //si viene una cadena ´datos´
-                            MessageBox.Show("El estado de transicion es: " + estadoalquevoy + " el elemento de transisicon " + elemento_transicion + "   caracteractual: " + CaracterActual);
+                    //        MessageBox.Show("El estado de transicion es: " + estadoalquevoy + " el elemento de transisicon " + elemento_transicion + "   caracteractual: " + CaracterActual);
                             if (elemento_transicion.Contains("´"))
                             {
-                                MessageBox.Show("el carater actua es: " + CaracterActual + " y estamos en analsis del la ´cadena´");
+                      //          MessageBox.Show("el carater actua es: " + CaracterActual + " y estamos en analsis del la ´cadena´");
 
                                 if (elemento_transicion.Equals("´´"))
                                 {
                                    
                                         if (CaracterActual == ' ')
                                         {
-                                        MessageBox.Show("Se trata de un espacio en blanco");
+                        //                MessageBox.Show("Se trata de un espacio en blanco");
 
                                         caracter_valido = true;
                                         }
@@ -162,7 +164,7 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                                     //limpiamos la cadena
                                     elemento_transicion = elemento_transicion.Replace("´", "");
-                                    MessageBox.Show("Vamos a comparar el tamaño del arreglo dela cadena entre comillas   " + " el tamanio es: " + elemento_transicion.Length);
+                          //          MessageBox.Show("Vamos a comparar el tamaño del arreglo dela cadena entre comillas   " + " el tamanio es: " + elemento_transicion.Length);
                                     foreach (char c in elemento_transicion)
                                     {
 
@@ -234,13 +236,13 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 //vamos a buscar a la lista de macros si existe el id
                                 String macroEncontra = buscarMacro(elemento_transicion, lista_macros);
                                 //si retorna "°" es porque no encontro se id
-                                MessageBox.Show("la macro encontrada es_: " + macroEncontra);
+                            //    MessageBox.Show("la macro encontrada es_: " + macroEncontra);
                                 if (macroEncontra.Equals("°°"))
                                 {
                                     caracter_valido = false;
                                     system_out_println += "La macro  \"" + elemento_transicion + "no existe, crea la macro primero!\n";
                                 }else
-                                {
+                                {//sino se encontró la macro
 
                                     //puede venir o una macro o conjunto o todo
                                     if (macroEncontra[1] == ',' || macroEncontra.Length == 1)
@@ -265,14 +267,14 @@ namespace Proyecto1_201700328.Analsis_thompson
                                     }
                                     else
                                     {
-                                        MessageBox.Show("se trata de un rango");
+                                     //   MessageBox.Show("se trata de un rango");
                                         //viene un rango de 3 o 5 
                                         caracter_valido = compara_rangos(macroEncontra, CaracterActual);
 
                                     }
                                 }
                             } // o si viene un id
-                            MessageBox.Show("EL caracter fue valido "+caracter_valido+" el caracter es: "+ CaracterActual);
+                           // MessageBox.Show("EL caracter fue valido "+caracter_valido+" el caracter es: "+ CaracterActual);
                             if (caracter_valido) {
                                 break;
                             }
@@ -282,42 +284,42 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                         if (caracter_valido)
                         {
-                            MessageBox.Show("EL caracter en el que estoy es: " + estado + " y al voy es: " + estadoalquevoy);
+                           // MessageBox.Show("EL caracter en el que estoy es: " + estado + " y al voy es: " + estadoalquevoy);
                             if (estado.Equals(estadoalquevoy))
                             {
                                 //no aumento el index porque quiere decir que enconre el dato correpondiente
-                                MessageBox.Show("No se aumento el index");
+                             //   MessageBox.Show("No se aumento el index");
                             }
                             else if (Convert.ToChar(estadoalquevoy) <Convert.ToChar(estado)) {
                                 int resta = Convert.ToChar(estado) - Convert.ToChar(estadoalquevoy);
                                 index_de_recorrido_de_estado = resta;
-                                MessageBox.Show("el index ahora es: "+index_de_recorrido_de_estado);
+                               // MessageBox.Show("el index ahora es: "+index_de_recorrido_de_estado);
                             }else if (Convert.ToChar(estadoalquevoy) > Convert.ToChar(estado))
                             {
                                 int suma = Convert.ToChar(estadoalquevoy)- Convert.ToChar(estado);
                                 index_de_recorrido_de_estado = suma+index_de_recorrido_de_estado;
-                                MessageBox.Show("el index ahora es: " + index_de_recorrido_de_estado);
+                             //   MessageBox.Show("el index ahora es: " + index_de_recorrido_de_estado);
                             }
                             else if (!estado.Equals(estadoalquevoy))
                             {
                                 index_de_recorrido_de_estado ++;
-                                MessageBox.Show("el index se aumenta a: "+index_de_recorrido_de_estado);
+                            //    MessageBox.Show("el index se aumenta a: "+index_de_recorrido_de_estado);
                             }
 
 
                         } else {
-                            MessageBox.Show("el caracter no fue valido -> "+CaracterActual);
+                            //MessageBox.Show("el caracter no fue valido -> "+CaracterActual);
                             lexema_valido = false;
                             break;
                             
                         }
 
-                        MessageBox.Show("el index resultante es: "+index_de_recorrido_de_estado);
+                        //MessageBox.Show("el index resultante es: "+index_de_recorrido_de_estado);
                         //termina un caracter
                     }
 
-                    MessageBox.Show("mostrando mensajes");
-                    if (lexema_valido )
+                   // MessageBox.Show("mostrando mensajes");
+                    if (lexema_valido)
                     {
                         system_out_println += "\n-> El lexema \"" + contendio + "\" con el id " + Id + " ACEPTADO";
                        
@@ -328,8 +330,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                     }
                 }
             }
-            MessageBox.Show("VAMOS A RETORNAR ESTOOOOOO");
-            MessageBox.Show("esto es lo que hay en sout -> " + system_out_println);
+           // MessageBox.Show("VAMOS A RETORNAR ESTOOOOOO");
+           // MessageBox.Show("esto es lo que hay en sout -> " + system_out_println);
             return system_out_println;
         }
 
@@ -340,10 +342,10 @@ namespace Proyecto1_201700328.Analsis_thompson
               
 
                 //antes de limpiarla
-                MessageBox.Show("La cadenita antes de limpiarla es: " + cadenita);
+             //   MessageBox.Show("La cadenita antes de limpiarla es: " + cadenita);
 
                 cadenita =cadenita.Replace("´","");
-                MessageBox.Show("La cadenita limpia es: " + cadenita);
+               // MessageBox.Show("La cadenita limpia es: " + cadenita);
                 //ante de recorrer el for each preguntamos
 
 
@@ -351,10 +353,10 @@ namespace Proyecto1_201700328.Analsis_thompson
                 caracterValido = false;
 
                 foreach (char letra in letras) {
-                    MessageBox.Show("comparando este " + letra + " con  " + caracter);
+                 //   MessageBox.Show("comparando este " + letra + " con  " + caracter);
                     if (letra == caracter)
                     {
-                        MessageBox.Show("encontrado letras iguales");
+                   //     MessageBox.Show("encontrado letras iguales");
                         caracterValido = true;
                         break;
                     }
@@ -545,7 +547,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             }
             else {
 
-                system_out_println += "\nLA MACRO CORRESPONDIENTE DESOBDECE LIMITES, CAMBIEN EL RANGO\n";
+                system_out_println += "\nLA MACRO CORRESPONDIENTE DESOBDECE LIMITES, CAMBIE EL RANGO\n";
             }
 
 
