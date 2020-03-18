@@ -22,7 +22,7 @@ namespace Proyecto1_201700328.Analizadores
         //Iniciamos constructor
         public Analisis_Lexico(String contenido_areaTexto) {
 
-            this.contenido_areaTexto = contenido_areaTexto;
+            this.contenido_areaTexto = contenido_areaTexto+"#";
 
         }
 
@@ -75,19 +75,20 @@ namespace Proyecto1_201700328.Analizadores
                             lexema += charActual;
                             estado = 3;
 
-                        }
-                        else if (charActual == '{' && cuenta_llave_apertura == 0)
-                        { //llave de apertura
-                            lexema += charActual;
-                            cuenta_llave_apertura++;
 
-                            aceptarToken(Token_lenguaje.TOKEN.LLAVE_A, lexema, fila, columna);
+                            /* else if (charActual == '{' && cuenta_llave_apertura == 0)
+                             { //llave de apertura
+                                 lexema += charActual;
+                                 cuenta_llave_apertura++;
+
+                                 aceptarToken(Token_lenguaje.TOKEN.LLAVE_A, lexema, fila, columna);
+                             }*/
                         }
-                        else if (charActual == '}')
-                        { //llave de cierre
-                            lexema += charActual;
-                            aceptarToken(Token_lenguaje.TOKEN.LLAVE_C, lexema, fila, columna);
-                        }
+                        /*   else if (charActual == '}')
+                         { //llave de cierre
+                             lexema += charActual;
+                             aceptarToken(Token_lenguaje.TOKEN.LLAVE_C, lexema, fila, columna);
+                         }*/
                         else if (charActual == '"')
                         { //llave de cierre
                             lexema += charActual;
@@ -115,6 +116,10 @@ namespace Proyecto1_201700328.Analizadores
                         {
                             lexema += charActual;
                             aceptarToken(Token_lenguaje.TOKEN.PTOCOMA, lexema, fila, columna);
+
+                        }
+                        else if (charActual == '#') {
+                            aceptarToken(Token_lenguaje.TOKEN.ACEPTACION, charActual, fila, columna);
 
                         }
                         else if (charActual >= 65 && charActual <= 90 || charActual >= 97 && charActual <= 122)

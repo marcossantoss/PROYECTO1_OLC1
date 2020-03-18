@@ -40,10 +40,9 @@ namespace Proyecto1_201700328.Analizadores
         private void INICIO()
         {
             // INICIO -> { CUERPO 
-            match(Token_lenguaje.TOKEN.LLAVE_A);
+           
             CUERPO();
 
-            match(Token_lenguaje.TOKEN.ACEPTACION);
 
         }
 
@@ -54,15 +53,13 @@ namespace Proyecto1_201700328.Analizadores
 
             // CUERPO -> CUERPO SENTENCIA }
             // |SENTENCIA;
-            if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.LLAVE_C || simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.ACEPTACION)
-            {
-                match(Token_lenguaje.TOKEN.LLAVE_C);
+
+            if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.ACEPTACION) {
+                return;
             }
-            else
-            {
                 SENTENCIA();
 
-            }
+            
         }
 
         private void SENTENCIA()

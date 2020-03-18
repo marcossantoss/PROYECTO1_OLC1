@@ -217,6 +217,9 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         public void thompson()
         {
+            rutas_AFD.Clear();
+            rutas_AFND.Clear();
+            rutas_transiciones.Clear();
             //por cada expresion se grafica un arbol
             foreach (Tablas_de_informacion expression in Informacion_de_cadaID)
             {
@@ -363,8 +366,10 @@ namespace Proyecto1_201700328.Analsis_thompson
                     expression.raiz_arbol_expresion = padre;
                     expression.raiz_thompson = inicio_devuelta;
                     /*para ver el recorrido del arbol thompson*/
-                 //   MessageBox.Show("la raiz es:" + inicio_devuelta.valor + "y el fin es :" + fin_devuelta.valor);
-                    grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta) + "\nlabel=\"" + expression.id + "\"", expression.id + "_AFND");
+                    //   MessageBox.Show("la raiz es:" + inicio_devuelta.valor + "y el fin es :" + fin_devuelta.valor);
+                      grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + grafica.recorrer_AFND(inicio_devuelta) + "\nlabel=\"" + expression.id + "\"", expression.id + "_AFND");
+                  //  grafica.escribir_fichero_grafo("rankdir = LR; size = \"8,5\" \n" + "node [shape = doublecircle]; " + fin_devuelta.valor + "\n" + "node [shape = circle];\n" + arbol_dot + "\nlabel=\"" + expression.id + "\"", expression.id + "_AFND");
+
                     grafica.generar_Dot_grafo_svg(expression.id + "_AFND", "C:\\AFNDS\\" + expression.id + "_AFND");
                     grafica.generar_Dot_grafo_png(expression.id + "_AFND", "C:\\AFNDS\\" + expression.id + "_AFND");
                     rutas_AFND.AddLast("C:\\AFNDS\\" + expression.id + "_AFND.jpg");
@@ -389,19 +394,21 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                     //creamos nuestra lista de transiciones
                     LinkedList<Transicion> transiciones = new LinkedList<Transicion>();
-                  //  MessageBox.Show(inicio_devuelta.valor);
+                    // 
+            //          MessageBox.Show(inicio_devuelta.valor);
                     //usamos el metodo "recorrer_obtener_conjunto" para obtener el conjunto inicial y por ende el primer estado A
                     conjunto = recorrer_obtener_conjunto(inicio_devuelta,inicio_devuelta);
-                    //    MessageBox.Show("EL estado inicial es:" + conjunto);
+                    //
+            //        MessageBox.Show("EL estado inicial es:" + conjunto);
                     //limpiamos la cadena puesto que hay una coma de mas al final , por lo tanto se quita
                     //y tambiien verifacamos si no devuelva nada para la recuperacion del dato
                     if (conjunto.Equals("")) {
                         conjunto += inicio_devuelta.valor+"°";
                     }
-               //     MessageBox.Show("antes de remove: " + conjunto);
+                    //                   MessageBox.Show("antes de remove: " + conjunto);
                     conjunto = conjunto.Remove(conjunto.Count()-1 , 1);
 
-                 //   MessageBox.Show("despues de remove: "+ conjunto);
+                    //                    MessageBox.Show("despues de remove: "+ conjunto);
                     Boolean esunestadodeaceptacion = false;
                     if (conjunto.Contains(fin_devuelta.valor))
                     {
@@ -409,7 +416,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                     }
 
                     transiciones.AddLast(new Transicion("A", conjunto, esunestadodeaceptacion));
-                //      MessageBox.Show("El estado es: " + "A\n" + "El conjunto inicial es: " + conjunto);
+                    //    
+            //        MessageBox.Show("El estado es: " + "A\n" + "El conjunto inicial es: " + conjunto);
                     //limpiamos puesto que vamos a recorrer nuevamente el arbol
 
 
@@ -418,7 +426,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                     //AQUI inicia el metodo para analizar los estados futuros asi como sus conjuntos
                     LinkedList<Transicion> listaAux = new LinkedList<Transicion>();
                     listaAux.AddLast(new Transicion(estado_AFD.ToString(), conjunto, esunestadodeaceptacion));
-                //   MessageBox.Show("vamos a iniciar");
+                    //  
+            //        MessageBox.Show("vamos a iniciar");
                     analizar_transiciones(transiciones, fin_devuelta.valor, objetos_analizar, inicio_devuelta, listaAux);
 
                     //analisis de transiciones
@@ -565,7 +574,7 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         // Nodo[] datoIzquierdo = null;
         // Nodo[] datoDerecho = null;
-
+        Boolean bandera_concatena = false;
         public void generarAFND(Nodo raiz)
         {
 
@@ -797,7 +806,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             Nodo fin1 = fin1aux;
          //   MessageBox.Show("aplicando retorno a "+fin1.valor);
             fin1.aplicaRetorno = true;
-
+            fin1.nodo_retorno = inicio1.valor;
             //inicio2->inicio1
             Nodo Inicio2 = new Nodo(estado.ToString()); estado++;
             Inicio2.transicion = "ε";
@@ -838,6 +847,7 @@ namespace Proyecto1_201700328.Analsis_thompson
 
             Nodo inicio1 = inicio1aux;
             Nodo fin1 = fin1aux;
+
 
             fin1.transicion = "ε";
             //inicio2->inicio1
@@ -880,6 +890,7 @@ namespace Proyecto1_201700328.Analsis_thompson
 
             Nodo fin1 = fin1aux;
             fin1.aplicaRetorno = true;
+            fin1.nodo_retorno = inicio1.valor;
             //inicio2->inicio1
             Nodo Inicio2 = new Nodo(estado.ToString()); estado++;
             Inicio2.transicion = "ε";
@@ -922,29 +933,13 @@ namespace Proyecto1_201700328.Analsis_thompson
 
             Boolean recorrehijos = true;
 
-       //     MessageBox.Show("Estamos aqui analizando \nEL nodo es:"+ padreActual.valor+ " tiene retorno : "+ padreActual.aplicaRetorno);
+            //    
+          // MessageBox.Show("Estamos aqui analizando \nEL nodo es:"+ padreActual.valor+ " tiene retorno : "+ padreActual.aplicaRetorno);
 
             if (padreActual.transicion.Equals("ε"))
             {
-           /*     MessageBox.Show("la pila contiene esto: "+ pila.Contains(padreActual.valor + "°"));
-               // conjunto += padreActual.valor + "°";
-                   if (!pila.Contains(padreActual.valor + "°"))
-                   {
-                       if (padreActual.aplicaRetorno)
-                       {
-                           conjunto += Convert.ToString(Convert.ToInt64(padreActual.valor) - 1) + "°";
-                           conjunto += padreActual.valor + "°";
-
-                         pila.AddLast(Convert.ToString(Convert.ToInt64(padreActual.valor) - 1) + "°");
-                           pila.AddLast(padreActual.valor + "°");
-                             //  conjunto += recorrer_obtener_conjunto(h);
-                       }
-                       else
-                       {
-                           conjunto += padreActual.valor + "°";
-                           pila.AddLast(padreActual.valor + "°");
-                       }
-                   }*/
+            //   MessageBox.Show("la pila contiene esto: "+ pila.Contains(padreActual.valor + "°"));
+           
                 recorrehijos = true;
             }
             else
@@ -979,9 +974,11 @@ namespace Proyecto1_201700328.Analsis_thompson
                            else
                            {
                         //si en dado caso hay que seguir buscando otra vez con epsilon en algun retorno
-                   //     MessageBox.Show("ingresando  a buscarnodoAUX");
-                        buscarNodoAux(inicio_thompshon, Convert.ToString(Convert.ToInt64(padreActual.valor) - 1), "ε");
-                 //       MessageBox.Show("EL padre actual es: " + padreActual.valor + "\nEl nodo a buscar es:" + Convert.ToString(Convert.ToInt64(padreActual.valor) - 1) + "\nEL nodo encontrado es: " + nodo_encontrado_de_la_busqueda.valor);
+                        // 
+                    //    MessageBox.Show("ingresando  a buscarnodoAUX");
+                        buscarNodoAux(inicio_thompshon, padreActual.nodo_retorno, "ε");
+                        //     
+                 //       MessageBox.Show("EL padre actual es: " + padreActual.valor + "\n El nodo a buscar es:" + padreActual.nodo_retorno + "\nEL nodo encontrado es: " + nodo_encontrado_de_la_busqueda.valor);
 
                         conjunto += recorrer_obtener_conjunto(nodo_encontrado_de_la_busqueda, inicio_thompshon);
                         nodo_encontrado_de_la_busqueda = null;
@@ -990,10 +987,10 @@ namespace Proyecto1_201700328.Analsis_thompson
                         //   MessageBox.Show("tengo que aplicar el retorno");
                         if (!pila.Contains(hijo.valor + "°"))
                                {
-                                   conjunto += Convert.ToString(Convert.ToInt64(padreActual.valor) - 1) + "°";
+                                   conjunto += padreActual.nodo_retorno + "°";
                                    conjunto += hijo.valor + "°";
                         
-                                   pila.AddLast(Convert.ToString(Convert.ToInt64(padreActual.valor) - 1) + "°");
+                                   pila.AddLast(padreActual.nodo_retorno + "°");
                                    pila.AddLast(hijo.valor + "°");
                            
                             //este sigue con los otros hijos
@@ -1021,10 +1018,11 @@ namespace Proyecto1_201700328.Analsis_thompson
             //MessageBox.Show("cantidad de conjuntos a analizar :"+conjuntosNuevo.Count);
             foreach (Transicion nueva in conjuntosNuevo)
             {
-               // MessageBox.Show("ejecuto nueva transiciones");
+                // MessageBox.Show("ejecuto nueva transiciones");
                 //por cada simbolo del sistema prMEocedemos a buscar sus nuevos conjuntos
 
-            //    MessageBox.Show("cantidad de simbolos:"+ simbolos.Count);
+                //
+           //     MessageBox.Show("Cantidad de simbolos:"+ simbolos.Count);
                 foreach (String simbolo in simbolos)
                 {
                     String conjunto_nuevo = "";
@@ -1035,24 +1033,26 @@ namespace Proyecto1_201700328.Analsis_thompson
                     foreach (String elemento in conjunto)
                     {
                         //aqui aplico lor ir 
-                       //   MessageBox.Show("el elemento es: " + elemento + "\nEl simbolo es: " + simbolo);
-                   /*     if (elemento.Equals(estadoAceptacion) && conjunto.Count()==1)
-                        {
-                   //         MessageBox.Show("estamos validando estados de aceptacion");
-                            conjunto_nuevo += estadoAceptacion + "°";
-                        }*/
+                        //   
+                    //    MessageBox.Show("el elemento es: " + elemento + "\nEl simbolo es: " + simbolo);
+                                   /*     if (elemento.Equals(estadoAceptacion) && conjunto.Count()==1)
+                                        {
+                                   //         MessageBox.Show("estamos validando estados de aceptacion");
+                                            conjunto_nuevo += estadoAceptacion + "°";
+                                        }*/
                         buscarNodo(inicio_thompson, elemento, simbolo);
                         Nodo ir = nodo_encontrado_de_la_busqueda;
-                        //si ir no es nulo quiere deci que si hay transicion y por lo tanto genera un conjunto
+                        //si ir no es nulo quiere decir que si hay transicion con epsilon y por lo tanto genera un conjunto
                         if (ir != null)
                         {
-                          
+
 
 
                             //vamos a buscar sus datos y los concatenamos al nuevo conjunto
-                          
-                         //      MessageBox.Show("ir tiene: " + ir.valor + "Tiene retorno :" + ir.aplicaRetorno.ToString());
-                                conjunto_nuevo += recorrer_obtener_conjunto(ir,inicio_thompson);
+
+                            //
+                         //   MessageBox.Show("ir tiene: " + ir.valor + " Tiene retorno :" + ir.aplicaRetorno.ToString());
+                            conjunto_nuevo += recorrer_obtener_conjunto(ir,inicio_thompson);
 
                             
 
@@ -1068,8 +1068,9 @@ namespace Proyecto1_201700328.Analsis_thompson
                     if (!conjunto_nuevo.Equals(""))
                     {
                         conjunto_nuevo = conjunto_nuevo.Remove(conjunto_nuevo.Count() - 1, 1);
-                        pila.Clear();
-                     //   MessageBox.Show("estoy aqui mostrando posible conjunto nuevo:" + conjunto_nuevo);
+                       // pila.Clear();
+                        //   
+                       // MessageBox.Show("estoy aqui mostrando posible conjunto nuevo:" + conjunto_nuevo);
                         buscarEstado(transiciones, conjunto_nuevo);
                         String estado = seencontroEstado;
 
@@ -1084,7 +1085,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                             transiciones.ElementAt(index).getEstadosSiguientes().AddLast(Estadoo_nuevvo + "¬" + simbolo);
                             //pregunto si es un estado de aceptacion
-                      //      MessageBox.Show("Es un estado de aceptacion?\n"+"Comparando conjunto"+conjunto_nuevo+" Estado de aceptacion es:"+estadoAceptacion);
+                            //
+                         //   MessageBox.Show("Es un estado de aceptacion?\n"+"Comparando conjunto"+conjunto_nuevo+" Estado de aceptacion es:"+estadoAceptacion);
                             Boolean esunestadodeaceptacion = false;
                             if (conjunto_nuevo.Contains(fin_devuelta.valor))
                             {
@@ -1094,7 +1096,9 @@ namespace Proyecto1_201700328.Analsis_thompson
                             listaAuxiliar.AddLast(new Transicion(Convert.ToString(Estadoo_nuevvo), conjunto_nuevo, esunestadodeaceptacion));
 
                             transiciones.AddLast(new Transicion(Convert.ToString(Estadoo_nuevvo), conjunto_nuevo, esunestadodeaceptacion));
-                        //    MessageBox.Show("El estado es: " + Estadoo_nuevvo + "\n" + "El conjunto inicial es: " + conjunto_nuevo);
+                            //    
+                            
+                       //     MessageBox.Show("El estado es: " + Estadoo_nuevvo + "\n" + "El conjunto inicial es: " + conjunto_nuevo);
 
 
                             //aqui mando a ejecutar transiciones el metodo otra vez 
@@ -1115,7 +1119,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                       
                     }
 
-
+                    pila.Clear();
 
                     //fin for
                 }
@@ -1158,7 +1162,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                     {
 
 
-                    //    MessageBox.Show("NODO ENCONTRADO\n" + "Estado: " + padreActual.valor + "\n" + "Con transicion:" + padreActual.transicion + "\n" + "hijo a retornar: " + hijo.valor);
+                     //  MessageBox.Show("NODO ENCONTRADO\n" + "Estado: " + padreActual.valor + "\n" + "Con transicion:" + padreActual.transicion + "\n" + "hijo a retornar: " + hijo.valor);
 
                         nodo_encontrado_de_la_busqueda = hijo;
                         return;
@@ -1185,7 +1189,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             {
           
 
-                  //     MessageBox.Show("NODO ENCONTRADO\n" + "Estado: " + padreActual.valor + "\n" + "Con transicion:" + padreActual.transicion + "\n" + "padre a retornar: " + padreActual.valor);
+                 //      MessageBox.Show("NODO ENCONTRADO\n" + "Estado: " + padreActual.valor + "\n" + "Con transicion:" + padreActual.transicion + "\n" + "padre a retornar: " + padreActual.valor);
 
                     nodo_encontrado_de_la_busqueda = padreActual;
                     return;
@@ -1217,7 +1221,7 @@ namespace Proyecto1_201700328.Analsis_thompson
             {
                 if (transicion.conjunto.Equals(conjunto))
                 {
-                //    MessageBox.Show("Comparando: esto: " + transicion.conjunto + " con " + conjunto);
+                   //MessageBox.Show("Comparando: esto: " + transicion.conjunto + " con " + conjunto);
                     seencontroEstado = transicion.estado;
                     return;
                 }
