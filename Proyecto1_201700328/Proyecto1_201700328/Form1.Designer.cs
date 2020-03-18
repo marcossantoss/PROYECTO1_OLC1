@@ -56,6 +56,7 @@
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.rEPORTEPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -116,7 +117,8 @@
             this.erroresLeToolStripMenuItem,
             this.lexemasToolStripMenuItem,
             this.macrosToolStripMenuItem,
-            this.expresionesRegularesToolStripMenuItem});
+            this.expresionesRegularesToolStripMenuItem,
+            this.rEPORTEPDFToolStripMenuItem});
             this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
             this.reportesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.reportesToolStripMenuItem.Text = "Reportes";
@@ -135,6 +137,7 @@
             this.tokensXMLToolStripMenuItem.Name = "tokensXMLToolStripMenuItem";
             this.tokensXMLToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.tokensXMLToolStripMenuItem.Text = "Tokens XML";
+            this.tokensXMLToolStripMenuItem.Click += new System.EventHandler(this.tokensXMLToolStripMenuItem_Click);
             // 
             // erroresLexicosToolStripMenuItem
             // 
@@ -315,6 +318,13 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // rEPORTEPDFToolStripMenuItem
+            // 
+            this.rEPORTEPDFToolStripMenuItem.Name = "rEPORTEPDFToolStripMenuItem";
+            this.rEPORTEPDFToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.rEPORTEPDFToolStripMenuItem.Text = "REPORTE PDF";
+            this.rEPORTEPDFToolStripMenuItem.Click += new System.EventHandler(this.rEPORTEPDFToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -374,6 +384,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         public System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.ToolStripMenuItem rEPORTEPDFToolStripMenuItem;
     }
 }
 

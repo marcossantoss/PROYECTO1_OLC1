@@ -13,6 +13,7 @@ namespace Proyecto1_201700328.Analizadores
         private String Contenido;
         public int fila;
         public int columna;
+        public String estado;
 
         public Expresion_Lexema(String Identiicador, String Contenido,int fila,int columna)
         {
@@ -20,6 +21,7 @@ namespace Proyecto1_201700328.Analizadores
             this.Contenido = Contenido;
             this.fila = fila;
             this.columna = columna;
+            this.estado = "";
         }
 
         /**

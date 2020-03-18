@@ -51,9 +51,7 @@ namespace Proyecto1_201700328.Analizadores
         private void CUERPO()
         {
 
-            // CUERPO -> CUERPO SENTENCIA }
-            // |SENTENCIA;
-
+            // CUERPO -> CUERPO #
             if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.ACEPTACION) {
                 return;
             }
@@ -65,25 +63,35 @@ namespace Proyecto1_201700328.Analizadores
         private void SENTENCIA()
         {
 
-            //sentencia -> CONJ  CONJUNTOS
-            if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.CONJ)
+            try
             {
-                match(Token_lenguaje.TOKEN.CONJ);
-                CONJUNTOS();
+                //sentencia -> CONJ  CONJUNTOS
+                if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.CONJ)
+                {
+                    match(Token_lenguaje.TOKEN.CONJ);
+                    CONJUNTOS();
+                }
+                else if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.ID)
+                {
+                    //sentencia -> ID  EXPRESIONES_LEXEMAS
+                    id_auxiliar = simbolo_preanalisis.getLexema().ToString();
+                    match(Token_lenguaje.TOKEN.ID);
+                    EXPRESIONES_LEXEMAS();
+                }
+                else if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.PORCENTAJES)
+                {
+                    //sentencia -> %% ESTO YA NO IMPORTA PORQUE YA NO VIENE PERO LO VAMOS A DEJAR
+                    match(Token_lenguaje.TOKEN.PORCENTAJES);
+                }
+                else{
+                    return;
+                }
+                CUERPO();
             }
-            else if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.ID)
-            {
-                //sentencia -> ID  EXPRESIONES_LEXEMAS
-                id_auxiliar = simbolo_preanalisis.getLexema().ToString();
-                match(Token_lenguaje.TOKEN.ID);
-                EXPRESIONES_LEXEMAS();
+            catch (Exception) {
+                MessageBox.Show("Error de Sintaxis");
+                return;
             }
-            else if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.PORCENTAJES)
-            {
-                //sentencia -> %%
-                match(Token_lenguaje.TOKEN.PORCENTAJES);
-            }
-            CUERPO();
 
         }
 
@@ -91,14 +99,20 @@ namespace Proyecto1_201700328.Analizadores
         {
 
             //CONJUNTOS ->: id flecha TIPO_C
-            match(Token_lenguaje.TOKEN.DOSPUNTOS);
-            id_auxiliar = simbolo_preanalisis.getLexema().ToString();
+            try
+            {
+                match(Token_lenguaje.TOKEN.DOSPUNTOS);
+                id_auxiliar = simbolo_preanalisis.getLexema().ToString();
 
-            match(Token_lenguaje.TOKEN.ID);
+                match(Token_lenguaje.TOKEN.ID);
 
-            match(Token_lenguaje.TOKEN.FLECHA);
-            TIPO_C();
-
+                match(Token_lenguaje.TOKEN.FLECHA);
+                TIPO_C();
+            }
+            catch (Exception) {
+                MessageBox.Show("Error de Sintaxis");
+                return;
+            }
         }
 
         private void EXPRESIONES_LEXEMAS()

@@ -29,6 +29,9 @@ namespace Proyecto1_201700328.Analsis_thompson
         public LinkedList<String> rutas_transiciones = new LinkedList<String>();
         public LinkedList<String> rutas_AFD = new LinkedList<String>();
 
+        public String xml_tokens="";
+        public String xml_errores="";
+
 
         public String log="";
         String conjunto = "";
@@ -447,6 +450,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                     //hacemos el analisis de los lexemas
                     Analisis_lexemas analizar_lexemas = new Analisis_lexemas(lista_macros, lista_lexemas, transiciones, expression.id);
                     log += analizar_lexemas.analizar_lexema() + "\n";
+                    xml_tokens += analizar_lexemas.salida_xml_tokens;
+                    xml_errores += analizar_lexemas.salida_xml_errores;
                   //  MessageBox.Show("Esto es lo que hay en log \n" + log);
                     conjunto = "";
 
@@ -467,6 +472,15 @@ namespace Proyecto1_201700328.Analsis_thompson
                 pila.Clear();
                 index = 0;
             }
+            //aqui se genera la salida html que es la misma de la consola
+            Reportes_HTML.Reporte_html generar_htmll = new Reportes_HTML.Reporte_html();
+            generar_htmll.escribir_lexemas_salida(lista_lexemas);
+            generar_htmll.mostrar_lexemas_salida();
+            //generamos xml en la ruta relativa
+            Reportes_XML.Reporte_XML generar_xmls = new Reportes_XML.Reporte_XML();
+            generar_xmls.reporte_tokens_xml(xml_tokens);
+            generar_xmls.reporte_tokens_errores(xml_errores);
+
 
         }
 

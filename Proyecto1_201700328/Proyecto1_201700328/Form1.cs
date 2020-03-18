@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,8 @@ namespace Proyecto1_201700328
 
         private void erroresLeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+                 Process.Start("errores_XML.xml");
 
         }
 
@@ -187,6 +190,9 @@ namespace Proyecto1_201700328
                 generar_reportes.escribir_fichero_tokens(analizar_lexicamente.returnListaTokens());
                 generar_reportes.probrando(analizar_lexicamente.returnListaErroresLexicos());
 
+                generar_reportes.escribir_fichero_tokens_y_errores(analizar_lexicamente.returnListaTokens(), analizar_lexicamente.returnListaErroresLexicos());
+       
+
                 Analizadores.Analisis_Sintactico analizar_sintacticamente = new Analizadores.Analisis_Sintactico(analizar_lexicamente.returnListaTokens());
 
                 if (analizar_sintacticamente.parser()) {
@@ -196,6 +202,7 @@ namespace Proyecto1_201700328
 
                     generar_reportes.escribir_macros(analizar_sintacticamente.Macros);
                     generar_reportes.escribir_lexemas(analizar_sintacticamente.Lexemas);
+
                     generar_reportes.escribir_expresionesregulares(analizar_sintacticamente.ExpresionesRegulares);
 
                     metodo_de_thompson hacer_analisis = new metodo_de_thompson(analizar_sintacticamente.Macros, analizar_sintacticamente.Lexemas, analizar_sintacticamente.ExpresionesRegulares);
@@ -240,6 +247,7 @@ namespace Proyecto1_201700328
         private void tokensHTMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             generar_reportes.mostrar_reporte_tokens();
+
         }
 
         private void erroresLexicosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -415,6 +423,17 @@ namespace Proyecto1_201700328
         
                 MessageBox.Show("No se ha detectado una opcion de imagenes\n PULSE automatas, siguientes, arboles u automatas");
             }
+        }
+
+        private void tokensXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+                Process.Start("Tokens_XML.xml");
+        }
+
+        private void rEPORTEPDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            generar_reportes.mostrar_reporte__tokens_y_errores();
         }
     }
 }

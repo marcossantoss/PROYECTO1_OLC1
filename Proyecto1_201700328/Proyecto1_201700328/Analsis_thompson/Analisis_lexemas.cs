@@ -19,7 +19,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
         String Id;
 
-        String salida_xml = "";
+        public String salida_xml_tokens = "";
+        public String salida_xml_errores = "";
         int contador_de_malos = 0;
         public Analisis_lexemas(LinkedList<Expresion_Lexema> lista_macros, LinkedList<Expresion_Lexema> lista_lexemas, LinkedList<Transicion> Transiciones, String id)
         {
@@ -38,7 +39,17 @@ namespace Proyecto1_201700328.Analsis_thompson
             //iniciamos con el analisis de cada cadena segun el id
             foreach (Expresion_Lexema lexema in lista_lexemas) {
                 String contendio = "";
-              //  MessageBox.Show("Id actual: " + Id);
+                salida_xml_tokens += "\n\n<id>";
+                salida_xml_tokens += Id;
+                salida_xml_tokens += "</id>\n";
+        
+
+                salida_xml_errores += "\n\n<id>";
+                salida_xml_errores+= Id;
+                salida_xml_errores += "</id>\n";
+               
+
+                //  MessageBox.Show("Id actual: " + Id);
                 //aqui le decimos que solo analice las que tengan el id actual
                 if (lexema.getIdentiicador().Equals(Id)) {
 
@@ -73,9 +84,11 @@ namespace Proyecto1_201700328.Analsis_thompson
                   //  MessageBox.Show("el estado inicial :" + estado);
                     Boolean lexema_valido = true;
 
-
+                    int fila = lexema.fila;
+                    int columna = lexema.columna;
                     for (int caracter_del_lexema = 0; caracter_del_lexema < contendio.Length; caracter_del_lexema++) {
                         //vamos a recorrer la cadena 
+                        columna++;
                         estado = Transiciones.ElementAt(index_de_recorrido_de_estado).estado;
                         char CaracterActual = contendio[caracter_del_lexema];
 
@@ -103,8 +116,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                                    
                                         if (CaracterActual == ' ')
                                         {
-                                  //      MessageBox.Show("Se trata de un espacio en blanco");
-
+                                        //      MessageBox.Show("Se trata de un espacio en blanco");
+                                        salida_xml_tokens += generar_xml("espacio_en_blanco",CaracterActual.ToString(),fila,columna);
                                         caracter_valido = true;
                                         }
                                         else
@@ -118,6 +131,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {
                                     if (CaracterActual == '>')
                                     {
+                                        salida_xml_tokens += generar_xml("mayor_que", CaracterActual.ToString(), fila, columna);
+
                                         caracter_valido = true;
                                     }
 
@@ -126,6 +141,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {
                                     if (CaracterActual == '<')
                                     {
+                                        salida_xml_tokens += generar_xml("menor_que", CaracterActual.ToString(), fila, columna);
+
                                         caracter_valido = true;
                                     }
 
@@ -135,6 +152,9 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                                     if (CaracterActual == '\n')
                                     {
+
+                                        salida_xml_tokens += generar_xml("salto_linea", "salto_linea", fila, columna);
+
                                         caracter_valido = true;
                                     }
                                 }
@@ -142,6 +162,9 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {
                                     if (CaracterActual == '\'')
                                     {
+
+                                        salida_xml_tokens += generar_xml("comilla_simple", CaracterActual.ToString(), fila, columna);
+
                                         caracter_valido = true;
                                     }
                                 }
@@ -149,6 +172,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {
                                     if (CaracterActual == '\"')
                                     {
+                                        salida_xml_tokens += generar_xml("comilla_doble", CaracterActual.ToString(), fila, columna);
+
                                         caracter_valido = true;
                                     }
                                 }
@@ -156,6 +181,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {
                                     if (CaracterActual == '\t')
                                     {
+                                        salida_xml_tokens += generar_xml("tabulacion", "tabulacion", fila, columna);
+
                                         caracter_valido = true;
                                     }
                                 }
@@ -172,6 +199,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                                         if (caracter_valido)
                                         {
+                                            salida_xml_tokens += generar_xml(elemento_transicion, elemento_transicion, fila, columna);
+
                                             caracter_del_lexema++;
                                         }
                                         else
@@ -180,6 +209,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                                             break;
                                         }
                                     }
+                                   
                                     //como este despues que finaliza siempre aumenta pero para evitar saltarno ese caracter le damos un menos menos
                                     if (caracter_valido) {
                                         caracter_del_lexema--;
@@ -195,13 +225,19 @@ namespace Proyecto1_201700328.Analsis_thompson
                             else if (elemento_transicion.StartsWith("[:") && elemento_transicion.EndsWith(":]"))
                             {
                                 caracter_valido = comparar_conjunto_todo(CaracterActual);
+                                if (caracter_valido) {
 
+                                    salida_xml_tokens += generar_xml(elemento_transicion,CaracterActual.ToString(), fila, columna);
+
+                                }
                                 //si viene epsilon tiene que venir esta palabra que se entiende como un espacion en blanco
                             }
                             else if (elemento_transicion.Equals("epsilon") || elemento_transicion.Equals("ε"))
                             {
                                 if (CaracterActual == ' ')
                                 {
+                                    salida_xml_tokens += generar_xml("Espacio_en_blanco", CaracterActual.ToString(), fila, columna);
+
                                     caracter_valido = true;
                                 }
 
@@ -210,6 +246,8 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                                 if (CaracterActual == '\n')
                                 {
+                                    salida_xml_tokens += generar_xml("salto_linea", "salto linea", fila, columna);
+
                                     caracter_valido = true;
                                 }
                             }
@@ -217,6 +255,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                             {
                                 if (CaracterActual == '\'')
                                 {
+                                    salida_xml_tokens += generar_xml(elemento_transicion, CaracterActual.ToString(), fila, columna);
+
                                     caracter_valido = true;
                                 }
                             }
@@ -224,6 +264,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                             {
                                 if (CaracterActual == '\"')
                                 {
+                                    salida_xml_tokens += generar_xml(elemento_transicion, CaracterActual.ToString(), fila, columna);
+
                                     caracter_valido = true;
                                 }
                             }
@@ -231,6 +273,8 @@ namespace Proyecto1_201700328.Analsis_thompson
                             {
                                 if (CaracterActual == '\t')
                                 {
+                                    salida_xml_tokens += generar_xml(elemento_transicion, "tabulacion", fila, columna);
+
                                     caracter_valido = true;
                                 }
 
@@ -240,7 +284,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 //vamos a buscar a la lista de macros si existe el id
                                 String macroEncontra = buscarMacro(elemento_transicion, lista_macros);
                                 //si retorna "°" es porque no encontro se id
-                             //   MessageBox.Show("La macro encontrada es: " + macroEncontra);
+                                //   MessageBox.Show("La macro encontrada es: " + macroEncontra);
                                 if (macroEncontra.Equals("°°"))
                                 {
                                     caracter_valido = false;
@@ -249,7 +293,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {//sino se encontró la macro
 
                                     //puede venir o una macro o conjunto o todo
-                               //     MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
+                                    //     MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
                                     if (macroEncontra[1] == ',' && macroEncontra.Length != 1)
                                     {
                                         //es un conjunto de caracteres
@@ -258,18 +302,25 @@ namespace Proyecto1_201700328.Analsis_thompson
                                     else if (macroEncontra.Length == 1) {
 
                                     caracter_valido= compara_conjunto_de_simbolitos(macroEncontra, CaracterActual);
+                                        if (caracter_valido) {
 
+                                            salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
+
+                                        }
                                     }//venga el conjunto todo
                                     else if (macroEncontra.StartsWith("[:") && macroEncontra.EndsWith(":]"))
                                     {
                                         caracter_valido = comparar_conjunto_todo(CaracterActual);
-
+                                        if (caracter_valido) {
+                                            salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
+                                        }
 
                                     }//si viene epsilon tiene que venir esta palabra que se entiende como un espacion en blanco
                                     else if (macroEncontra.Equals("epsilon") || macroEncontra.Equals("ε"))
                                     {
                                         if (CaracterActual == ' ')
                                         {
+                                            salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
                                             caracter_valido = true;
                                         }
 
@@ -277,9 +328,12 @@ namespace Proyecto1_201700328.Analsis_thompson
                                     }
                                     else
                                     {
-                              //        MessageBox.Show("Verificando si es un rango");
+                                        // MessageBox.Show("Verificando si es un rango");
                                         //viene un rango de 3 o 5 
                                         caracter_valido = compara_rangos(macroEncontra, CaracterActual);
+                                        if (caracter_valido) {
+                                            salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
+                                        }
 
                                     }
                                 }
@@ -318,7 +372,9 @@ namespace Proyecto1_201700328.Analsis_thompson
 
 
                         } else {
-                        //    MessageBox.Show("El caracter no fue valido -> "+CaracterActual);
+                            //    MessageBox.Show("El caracter no fue valido -> "+CaracterActual);
+                            salida_xml_errores += generar_xml_errores(CaracterActual.ToString(), fila, columna++);
+
                             contador_de_malos++;
                                                         
                         }
@@ -331,15 +387,18 @@ namespace Proyecto1_201700328.Analsis_thompson
                     if (lexema_valido && contador_de_malos==0)
                     {
                         system_out_println += "\n-> El lexema \"" + contendio + "\" con el id " + Id + " ACEPTADO";
+                        lexema.estado = "ACEPTADO";
                        
                     }
                     else {
                         system_out_println += "\n-> El lexema \"" + contendio + "\" con el id " + Id + " RECHAZADO";
-                        
+                        lexema.estado = "RECHAZADO";
                     }
+                  
                 }
                 contador_de_malos = 0;
             }
+           
             // MessageBox.Show("VAMOS A RETORNAR ESTOOOOOO");
             // MessageBox.Show("esto es lo que hay en sout -> " + system_out_println);
            
@@ -556,8 +615,37 @@ namespace Proyecto1_201700328.Analsis_thompson
 
             return esValidoelcaracter;
         }
-    
 
-    
+
+        private String generar_xml(String nombre, String valor, int fila, int columna) {
+
+            String xml = "";
+
+            xml += "<Token>\n"+"<Nombre>"+nombre+"</Nombre>\n";
+            xml += "<Valor>" + valor + "</Valor>\n";
+            xml += "<Fila>" +fila+"</Fila>\n";
+            xml += "<Columna>" + columna + "</Columna>\n";
+            xml += "</Token>\n";
+
+            return xml;
+
+         }
+        private String generar_xml_errores(String valor, int fila, int columna)
+        {
+
+            String xml = "";
+
+           
+            xml += "<Error>\n<Valor>" + valor + "</Valor>\n";
+            xml += "<Fila>" + fila + "</Fila>\n";
+            xml += "<Columna>" + columna + "</Columna>\n";
+            xml += "</Error>\n";
+
+            return xml;
+
+        }
+
+
+
     }
 }
