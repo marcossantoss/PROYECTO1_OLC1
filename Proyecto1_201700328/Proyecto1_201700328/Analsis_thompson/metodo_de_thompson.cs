@@ -325,10 +325,13 @@ namespace Proyecto1_201700328.Analsis_thompson
                     grafica.generar_Dot_grafo_png(expression.id + "_AFD", "C:\\AFDS\\" + expression.id + "_AFD");
                     rutas_AFND.AddLast("C:\\AFDS\\" + expression.id + "_AFD.jpg");
 
+
                     //hacemos el analisis de los lexemas
                     Analisis_lexemas analizar_lexemas = new Analisis_lexemas(lista_macros, lista_lexemas, transiciones, expression.id);
-                     log+=  analizar_lexemas.analizar_lexema()+"\n";
-                 //   MessageBox.Show("Esto es lo que hay en log \n"+ log);
+                    log += analizar_lexemas.analizar_lexema() + "\n";
+                    xml_tokens += analizar_lexemas.salida_xml_tokens;
+                    xml_errores += analizar_lexemas.salida_xml_errores;
+                    //  MessageBox.Show("Esto es lo que hay en log \n" + log);
                     conjunto = "";
 
 

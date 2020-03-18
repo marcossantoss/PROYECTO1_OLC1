@@ -57,24 +57,24 @@ namespace Proyecto1_201700328
         private void abrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //creamos un objeto de tipo openfiledialog
-            OpenFileDialog archivo = new OpenFileDialog();
-            System.IO.StreamReader lectura = null;
-            //ahora decidimos que tipos de archivos leer para evitar buscar otras extensiones
-            archivo.Filter = "Text [*.er*]|*.er|All Files [*,*]|*,*";
-            archivo.CheckFileExists = true;
-            archivo.Title = "Abrir archivo";
-            archivo.ShowDialog(this);
+           //ahora decidimos que tipos de archivos leer para evitar buscar otras extensiones
+            openFileDialog1.Filter = "Text [*.er*]|*.er|All Files [*,*]|*,*";
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.Title = "Abrir archivo";
+            
             try
             {
-                archivo.OpenFile();
-                lectura = System.IO.File.OpenText(archivo.FileName);
 
-
+                openFileDialog1.ShowDialog();
+                System.IO.StreamReader Abrir = new System.IO.StreamReader(openFileDialog1.FileName);
+                
+                
+            
                 String nombre_pagina = "pestaña" + contador_tabs;
 
                 TabPage paginaNueva = new TabPage(nombre_pagina);
                 RichTextBox lienzo = new RichTextBox();
-                lienzo.Text = lectura.ReadToEnd();
+                lienzo.Text = Abrir.ReadToEnd();
                 lienzo.Height = 330;
                 lienzo.Width = 555;
                 paginaNueva.Controls.Add(lienzo);
@@ -84,9 +84,7 @@ namespace Proyecto1_201700328
                 pestanas.Add(paginaNueva, lienzo);
 
                 contador_tabs++;
-
-
-
+                Abrir.Close();
 
             }
             catch (Exception)
@@ -434,6 +432,54 @@ namespace Proyecto1_201700328
         private void rEPORTEPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             generar_reportes.mostrar_reporte__tokens_y_errores();
+        }
+
+        private void guardarComoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //se crea un objeto de tipo savefiledialog que nos servira para guardar el archivo
+            SaveFileDialog Save = new SaveFileDialog();
+            System.IO.StreamWriter myStreamWriter = null;
+            //al igual que para abrir el tipo de documentos aqui se especifica en que extenciones se puede guardar el archivo
+            Save.Filter = "Text (*.er)|*.er|All files(*.*)|*.*";
+            Save.CheckPathExists = true;
+            Save.Title = "Guardar como";
+            Save.ShowDialog(this);
+            try
+            {
+                //este codigo se utiliza para guardar el archivo de nuestro editor
+                myStreamWriter = System.IO.File.AppendText(Save.FileName);
+                RichTextBox texto_analizar = buscar_pestana(pestana_actual);
+                myStreamWriter.Write(texto_analizar.Text);
+                myStreamWriter.Flush();
+
+            }
+            catch (Exception) { MessageBox.Show("No se guardo el archivo"); }
+
+        }
+
+        private void guardarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //se crea un objeto de tipo savefiledialog que nos servira para guardar el archivo
+            SaveFileDialog Save = new SaveFileDialog();
+            System.IO.StreamWriter myStreamWriter = null;
+            //al igual que para abrir el tipo de documentos aqui se especifica en que extenciones se puede guardar el archivo
+            Save.Filter = "Text (*.er)|*.er|All files(*.*)|*.*";
+            Save.CheckFileExists = true;
+
+            Save.Title = "Guardar";
+            Save.ShowDialog(this);
+            try
+            {
+                //este codigo se utiliza para guardar el archivo de nuestro editor
+                RichTextBox texto_analizar = buscar_pestana(pestana_actual);
+               
+                myStreamWriter = System.IO.File.CreateText(Save.FileName);
+                myStreamWriter.Write(texto_analizar.Text);
+                myStreamWriter.Flush();
+
+            }
+            catch (Exception) { MessageBox.Show("No se guardo el archivo"); }
+
         }
     }
 }
