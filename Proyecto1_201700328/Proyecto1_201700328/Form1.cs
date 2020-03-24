@@ -206,6 +206,7 @@ namespace Proyecto1_201700328
                     metodo_de_thompson hacer_analisis = new metodo_de_thompson(analizar_sintacticamente.Macros, analizar_sintacticamente.Lexemas, analizar_sintacticamente.ExpresionesRegulares);
                     hacer_analisis.procesar_expresiones();
                     hacer_analisis.thompson();
+                    MessageBox.Show("este si se tiene que mostrar");
                     AFD = hacer_analisis.rutas_AFD;
                     AFND = hacer_analisis.rutas_AFND;
                     tranciones = hacer_analisis.rutas_transiciones;

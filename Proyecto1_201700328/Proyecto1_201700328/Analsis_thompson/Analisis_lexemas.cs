@@ -191,7 +191,7 @@ namespace Proyecto1_201700328.Analsis_thompson
 
                                     //limpiamos la cadena
                                     elemento_transicion = elemento_transicion.Replace("´", "");
-                                //    MessageBox.Show("Vamos a comparar el tamaño del arreglo de la cadena entre comillas   " + " el tamanio es: " + elemento_transicion.Length);
+                              //     MessageBox.Show("Vamos a comparar el tamaño del arreglo de la cadena entre comillas   " + " el tamanio es: " + elemento_transicion.Length);
                                     foreach (char c in elemento_transicion)
                                     {
 
@@ -293,7 +293,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {//sino se encontró la macro
 
                                     //puede venir o una macro o conjunto o todo
-                                    //MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
+                                  //  MessageBox.Show("que pasa esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
                                     if (macroEncontra[1] == ',' && macroEncontra.Length != 1)
                                     {
                                         //es un conjunto de caracteres
