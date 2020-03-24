@@ -370,19 +370,25 @@ namespace Proyecto1_201700328
         {
             if (opcion == 1)
             {
-
-                if (0 < interacion)
+                try
                 {
+                    if (0 < interacion)
+                    {
 
-                    pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
-                    interacion--;
+                        pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
+                        interacion--;
 
+                    }
+                    else
+                    {
+                        interacion = 0;
+                        pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
+
+                    }
                 }
-                else
-                {
-                    interacion = 0;
-                    pictureBox1.Image = Image.FromFile(tranciones.ElementAt(interacion));
+                catch (Exception) {
 
+                    MessageBox.Show("No hay mas imagenes");
                 }
 
             }
@@ -408,17 +414,26 @@ namespace Proyecto1_201700328
                 }
             else if (opcion == 3)
             {
-                if (0 < interacion)
+                try
                 {
+                    if (0 < interacion)
+                    {
 
-                    pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
-                    interacion--;
+                        pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
+                        interacion--;
+                    }
+                    else
+                    {
+                        interacion = 0;
+                        pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
+
+                    }
+
                 }
-                else
+                catch (Exception)
                 {
-                    interacion = 0;
-                    pictureBox1.Image = Image.FromFile(AFND.ElementAt(interacion));
 
+                    MessageBox.Show("No hay mas imagenes");
                 }
             }
             else

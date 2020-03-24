@@ -293,7 +293,7 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {//sino se encontró la macro
 
                                     //puede venir o una macro o conjunto o todo
-                                        MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
+                                    //MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
                                     if (macroEncontra[1] == ',' && macroEncontra.Length != 1)
                                     {
                                         //es un conjunto de caracteres
