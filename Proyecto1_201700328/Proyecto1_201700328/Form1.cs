@@ -388,19 +388,24 @@ namespace Proyecto1_201700328
             }
             else if (opcion == 2)
             {
-
-                if (0 < interacion)
+                try
                 {
+                    if (0 < interacion)
+                    {
 
-                    pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
-                    interacion--;
+                        pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                        interacion--;
+                    }
+                    else
+                    {
+                        interacion = 0;
+                        pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                    }
                 }
-                else
-                {
-                    interacion = 0;
-                    pictureBox1.Image = Image.FromFile(AFD.ElementAt(interacion));
+                catch (Exception) {
+                    MessageBox.Show("No hay mas imagenes");
                 }
-            }
+                }
             else if (opcion == 3)
             {
                 if (0 < interacion)
@@ -418,7 +423,7 @@ namespace Proyecto1_201700328
             }
             else
             {
-        
+
                 MessageBox.Show("No se ha detectado una opcion de imagenes\n PULSE automatas, siguientes, arboles u automatas");
             }
         }

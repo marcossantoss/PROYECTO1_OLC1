@@ -159,7 +159,7 @@ namespace Proyecto1_201700328.Analizadores
             if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.CONJUNTOFINITIO)
             {
                 //EXPRESIONES_LEXEMAS -> flecha EXPRESION
-                
+
                 String contenido = simbolo_preanalisis.getLexema().ToString();
                 Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido, simbolo_preanalisis.getFila(), simbolo_preanalisis.getColumna()));
 
@@ -174,6 +174,14 @@ namespace Proyecto1_201700328.Analizadores
                 Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido, simbolo_preanalisis.getFila(), simbolo_preanalisis.getColumna()));
 
                 match(Token_lenguaje.TOKEN.MACROS);
+
+                match(Token_lenguaje.TOKEN.PTOCOMA);
+
+            }
+            else if (simbolo_preanalisis.getTipo() == Token_lenguaje.TOKEN.CARACTERTODO) {
+                String contenido = simbolo_preanalisis.getLexema().ToString();
+                Macros.AddLast(new Expresion_Lexema(id_auxiliar, contenido, simbolo_preanalisis.getFila(), simbolo_preanalisis.getColumna()));
+                match(Token_lenguaje.TOKEN.CARACTERTODO);
 
                 match(Token_lenguaje.TOKEN.PTOCOMA);
 

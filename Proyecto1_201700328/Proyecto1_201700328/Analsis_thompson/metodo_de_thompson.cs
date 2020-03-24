@@ -91,10 +91,11 @@ namespace Proyecto1_201700328.Analsis_thompson
                             cont_verificador3 = 1;
 
                         }
-                        else if (caracter == '\'' && cont_verificador3 == 1)
+                        else if ((caracter == '\'' && cont_verificador3 == 1))
                         {
                             expresion_estructurada.AddLast("comillasimple");
                             cont_verificador3 = 0;
+                       
                             cadena_nueva = "";
                         }
                         else if (caracter == 'n' && cont_verificador3 == 1)
@@ -131,10 +132,38 @@ namespace Proyecto1_201700328.Analsis_thompson
                         }
                         else if (caracter == '"' && cont_verificador == 1)
                         {
-                            cadena_nueva += caracter;
-                            expresion_estructurada.AddLast(cadena_nueva.Replace("\"", "´"));
-                            cadena_nueva = "";
-                            cont_verificador = 0;
+
+                            if (cadena_nueva.Equals(""))
+                            {
+                                //ya se tomo en cuenta un carater especial
+                                //no se hace nada mas que limpiar
+                                cont_verificador = 0;
+                                cadena_nueva = "";
+                            }
+                            else {
+
+                                //aqui puede que venga a caer simbolo como '
+                                //entonces
+                                
+                                cadena_nueva += caracter;
+                                if (cadena_nueva.Equals("\"'\""))
+                                {
+
+                                    expresion_estructurada.AddLast("comillasimple");
+
+                                }
+                                else {
+                                    expresion_estructurada.AddLast(cadena_nueva.Replace("\"", "´"));
+
+                                }
+
+
+                                cadena_nueva = "";
+                                cont_verificador = 0;
+
+                            }
+
+                 
 
                         }
                         else if (caracter == '{' && exp[contAux + 1] != '}')

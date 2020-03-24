@@ -293,21 +293,37 @@ namespace Proyecto1_201700328.Analsis_thompson
                                 {//sino se encontró la macro
 
                                     //puede venir o una macro o conjunto o todo
-                                    //     MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
+                                        MessageBox.Show("esto es una coma : " + macroEncontra[1] +" y su longitud es: "+ macroEncontra.Length);
                                     if (macroEncontra[1] == ',' && macroEncontra.Length != 1)
                                     {
                                         //es un conjunto de caracteres
-                                   caracter_valido=  compara_conjunto_de_simbolitos(macroEncontra, CaracterActual);
+                                        caracter_valido = compara_conjunto_de_simbolitos(macroEncontra, CaracterActual);
+                                        if (caracter_valido)
+                                        {
+
+                                            salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
+
+                                        }
                                     }//si es un conjunto con un solo elemento
                                     else if (macroEncontra.Length == 1) {
 
-                                    caracter_valido= compara_conjunto_de_simbolitos(macroEncontra, CaracterActual);
+                                        caracter_valido = compara_conjunto_de_simbolitos(macroEncontra, CaracterActual);
                                         if (caracter_valido) {
 
                                             salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
 
                                         }
-                                    }//venga el conjunto todo
+                                    } else if (macroEncontra[2] == ',' && macroEncontra.Length != 1) {
+                                        //es un conjunto de caracteres
+                                        caracter_valido = compara_conjunto_de_simbolitos(macroEncontra, CaracterActual);
+                                        if (caracter_valido)
+                                        {
+
+                                            salida_xml_tokens += generar_xml(macroEncontra, elemento_transicion, fila, columna++);
+
+                                        }
+                                    }
+                                    //venga el conjunto todo
                                     else if (macroEncontra.StartsWith("[:") && macroEncontra.EndsWith(":]"))
                                     {
                                         caracter_valido = comparar_conjunto_todo(CaracterActual);
